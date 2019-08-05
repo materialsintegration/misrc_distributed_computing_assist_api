@@ -92,7 +92,7 @@ def check_accept_id(api_url):
     # request bodyにaccept_idが無い
     if ("accept_id" in flask.request.get_json()) is False:
         log_print(1, "(/%s) There is no accept_id in request body."%api_url)
-        response = {"error":"There is no accept id in equest body"}
+        response = {"message":"There is no accept id in equest body", "code":400}
         return False, response
 
     # 内部データにaccept_idの情報が無い（未登録か、30分ルールで削除されたか
@@ -100,10 +100,21 @@ def check_accept_id(api_url):
     log_print(3, calc_informations)
     if (accept_id in calc_informations) is False:
         log_print(1, "(/%s) There is no date related accept_id(%s) in internal dictionary."%(api_url, accept_id))
-        response = {"error":"There is no data related accept id(%s) in internal dictionary"%accept_id}
+        response = {"message":"There is no data related accept id(%s) in internal dictionary"%accept_id, "code":400}
         return False, response
 
     return True, accept_id
+
+#---------------------------------------
+def return_api(response_text):
+    '''
+    api-gwへのresponseを作成して、返却する。
+    '''
+
+    response = flask.make_response(flask.jsonify(response_text))
+    response.headers['Authorization'] = 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed'
+
+    return response
 
 #==================== デバッグ用 ===========================
 @app.route("/%s/get-calcinfo"%BASE_URL)
@@ -112,7 +123,8 @@ def get_calcinfo():
     登録済みの計算情報一覧
     '''
 
-    return flask.make_response(flask.jsonify(calc_informations))
+    #return flask.make_response(flask.jsonify(calc_informations))
+    return_api(calc_informations)
 
 #==================== 対MIシステムのAPI ====================
 @app.route("/%s/add-calcinfo"%BASE_URL, methods=['POST'])
@@ -121,13 +133,12 @@ def add_calcinfo():
     計算の登録
     '''
 
-    response = {"accept_id":None}
-
     # JSONから取り出し。
     if ("calc-info" in flask.request.get_json()) is False:
-        response = {"error":"no command entry"}
+        response = {"message":"no command entry", "code":400}
         log_print(1, "(/add-calcinfo)no command entry from MI system when calculation data regist.")
-        return flask.make_response(flask.jsonify(response), 400)
+        return_api(response)
+        #return flask.make_response(flask.jsonify(response), 400)
 
     calc_info = flask.request.get_json().get("calc-info")
     # 遠隔サイトの確認
@@ -137,20 +148,13 @@ def add_calcinfo():
             if site == calc_info["remote-site"]:
                 site_id = site
         if site_id is None:
-            response = flask.Response('"message":"missmatch remote-site id", "code":"400"')
-            response.headers['Authorization'] = 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed'
+            response = {"message":"missmatch remote-site id", "code":"400")
             log_print(1, "(/add-calcinfo)missmatch remote-site id")
-            return response
-            #return flask.make_response(flask.jsonify(response), 400)
+            return_api( response )
     else:
-        response_text = {"message":"no remote-site id", "code":400}
-        response = flask.make_response(flask.jsonify(response_text))
-        response.headers['Authorization'] = 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed'
-        response.headers['message'] = "no remote-site id"
-        response.headers['code'] = 400
+        response = {"message":"no remote-site id", "code":400}
         log_print(1, "(/add-calcinfo)no remote-site id")
-        return response
-        #return flask.make_response(flask.jsonify(response), 400)
+        return_api(response)
 
     # コマンドの確認
     command_name = None
@@ -160,19 +164,22 @@ def add_calcinfo():
                 if command == calc_info["command"]:
                     command_name = command
         if command_name is None:
-            response = {"error":"invalid command name(%s)"%calc_info["command"]}
+            response = {"message":"invalid command name(%s)"%calc_info["command"], "code":401}
             log_print(1, "(/add-calcinfo)invalid command entry(%s)"%calc_info["command"])
-            return flask.make_response(flask.jsonify(response), 401)
+            #return flask.make_response(flask.jsonify(response), 401)
+            return_api(response)
     else:
-        response = {"error":"no command entry"}
+        response = {"message":"no command entry", "code":400}
         log_print(1, "(/add-calcinfo)no command entry")
-        return flask.make_response(flask.jsonify(response),400)
+        #return flask.make_response(flask.jsonify(response),400)
+        return_api(response)
 
     new_accept_id = str(uuid.uuid4())
     if (new_accept_id in calc_informations) is True:
-        response = {"error":"duplicate uuid"}
+        response = {"message":"duplicate uuid", "code":400}
         log_print(1, "(/add-calcinfo)duplicate accept_id has been established.")
-        return flask.make_response(flask.jsonify(response), 400)
+        #return flask.make_response(flask.jsonify(response), 400)
+        return_api(response)
 
     # 登録情報の確認（時間超過を判定）
     check_dict()
@@ -181,10 +188,11 @@ def add_calcinfo():
     calc_informations[new_accept_id]["accept_time"] = datetime.datetime.now()
     calc_informations[new_accept_id]["wait_allow"] = "not start"
     calc_informations[new_accept_id]["calc_start"] = "none"
-    response["accept_id"] = new_accept_id
+    response = {"message":"calc info successfully added", "code":200, "accept_id":"%s"%new_accept_id}
     log_print(3, "(/add-calcinfo)registerd calc info with accept_id(%s)"%new_accept_id)
 
-    return flask.jsonify(response)
+    #return flask.jsonify(response)
+    return_api(response)
 
 #---------------------------------------
 @app.route("/%s/allow-wait-calc"%BASE_URL, methods=['POST'])
@@ -196,7 +204,8 @@ def allow_wait_calc():
     # accept_id他のチェック
     retval, accept_id = check_accept_id("allow-wait-calc")
     if retval is False:
-        return flask.make_response(flask.jsonify(accept_id), 400)
+        #return flask.make_response(flask.jsonify(accept_id), 400)
+        return_api(accept_id)
 
     response = {"accept_id":accept_id}
     calc_start = calc_informations[accept_id]["calc_start"]
@@ -205,20 +214,23 @@ def allow_wait_calc():
     # 既に計算が開始している
     if calc_start != "not start":
         log_print(1, "(/allow-wait-calc) cannot wait allow. calcuration have been started at the remote. accept_id(%s)"%accept_id)
-        response["error"] = "calcuration have been started at the remote. accept_id(%s)"%accept_id
-        return flask.make_response(flask.jsonify(response), 401)
+        response = {"message":"calcuration have been started at the remote. accept_id(%s)"%accept_id, "code":401}
+        #return flask.make_response(flask.jsonify(response), 401)
+        return_api(response)
 
     # すでにallow-wait-calcしている
     if wait_allow != "none":
         log_print(1, "(/allow-wait-calc) already wait calcurate. accept_id(%s)"%accept_id)
-        response["error"] = "already wait calcurate. accept_id(%s)"%accept_id
-        return flask.make_response(flask.jsonify(response), 401)
+        response = {"message":"already wait calcurate. accept_id(%s)"%accept_id, "code":401}
+        #return flask.make_response(flask.jsonify(response), 401)
+        return_api(response)
 
     # Wait開始登録
     calc_informations[accept_id]["wait_allow"] = datetime.datetime.now()
 
-    response["info"] = "successfully reqeust(start waiting calcurate)"
-    return flask.jsonify(response)
+    response = {"message":"successfully reqeust(start waiting calcurate)", "code":200}
+    #return flask.jsonify(response)
+    return_api(response)
 
 #---------------------------------------
 @app.route("/%s/cancel-wait-calc"%BASE_URL, methods=['POST'])
@@ -230,7 +242,8 @@ def cancel_wait_calc():
     # accept_id他のチェック
     retval, accept_id = check_accept_id("cancel-wait-calc")
     if retval is False:
-        return flask.make_response(flask.jsonify(accept_id), 400)
+        #return flask.make_response(flask.jsonify(accept_id), 400)
+        return_api(accept_id)
 
     response = {"accept_id":accept_id}
     calc_start = calc_informations[accept_id]["calc_start"]
@@ -239,14 +252,16 @@ def cancel_wait_calc():
     # 既に計算が開始している
     if calc_start != "not start":
         log_print(1, "(/cancel-wait-calc) cannot cancel. calcuration have been started at the remote. accept_id(%s)"%accept_id)
-        response["error"] = "calcuration have been started at the remote. accept_id(%s)"%accept_id
-        return flask.make_response(flask.jsonify(response), 401)
+        response {"message":"calcuration have been started at the remote. accept_id(%s)"%accept_id, "code":401}
+        #return flask.make_response(flask.jsonify(response), 401)
+        return_api(response)
 
     # 指定されたaccept_idの情報を削除する。
     delete_calc_information(accept_id)
 
-    response["info"] = "successfully cancel wait(delete calculation information for accept_id(%s))"%accept_id
-    return flask.jsonify(response)
+    response = {"message":"successfully cancel wait(delete calculation information for accept_id(%s))"%accept_id, "code":200}
+    #return flask.jsonify(response)
+    return_api(response)
 
 #---------------------------------------
 @app.route("/%s/status"%BASE_URL, methods=['GET'])
@@ -258,10 +273,12 @@ def status():
     # accept_id他のチェック
     retval, accept_id = check_accept_id("/status")
     if retval is False:
-        return flask.make_response(flask.jsonify(accept_id), 400)
+        #return flask.make_response(flask.jsonify(accept_id), 400)
+        return_api(accept_id)
 
-    status = {"status":"%s"%calc_informations[accept_id]["cacl_start"]}
-    return flask.jsonift(status)
+    status = {"message":"status:%s"%calc_informations[accept_id]["cacl_start"], "code":200}
+    #return flask.jsonift(status)
+    return_api(status)
 
 #---------------------------------------
 @app.route("/%s/get-calc-result"%BASE_URL, methods=['GET'])
