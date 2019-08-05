@@ -137,7 +137,7 @@ def add_calcinfo():
             if site == calc_info["remote-site"]:
                 site_id = site
         if site_id is None:
-            response = {"error":"missmatch remote-site id"}
+            response = {'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', "error":"missmatch remote-site id"}
             log_print(1, "(/add-calcinfo)missmatch remote-site id")
             return flask.make_response(flask.jsonify(response), 400)
     else:

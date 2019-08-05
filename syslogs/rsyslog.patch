@@ -5,13 +5,3 @@
 > # python logging ではUDPで転送されてくるため
 > $ModLoad imudp
 > $UDPServerRun 514
-80a82,90
-> 
-> !python
-> # 全てのログを記録する
-> *.*                                                     /var/log/distcomp-api/distcomp-all.log
-> # notice以上のログ
-> *.notice                                                /var/log/distcomp-api/distcomp-notice.log
-> # errのみを記録する
-> *.=err                                                  /var/log/distcomp-api/distcomp-error.log
-> 

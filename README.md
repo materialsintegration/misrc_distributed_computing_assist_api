@@ -16,6 +16,7 @@ MIシステムはローカルに構築された計算機のみを使用して計
   ```
   # cd /etc
   # patch -b rsyslog.conf <directory name for this product>/syslogs/rsyslog.patch
+  # cp <directory name for this product>/syslogs/distcomp-api.conf .
   # systemctl restart rsyslog(RHEL 7の場合)
   または
   # service rsyslog restart(RHEL 6の場合)
