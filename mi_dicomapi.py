@@ -143,7 +143,8 @@ def add_calcinfo():
             return response
             #return flask.make_response(flask.jsonify(response), 400)
     else:
-        response = flask.Response({"message":"no remote-site id", "code":400})
+        response_text = {"message":"no remote-site id", "code":400}
+        response = flask.make_response(flask.jsonify(response_text))
         response.headers['Authorization'] = 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed'
         response.headers['message'] = "no remote-site id"
         response.headers['code'] = 400
