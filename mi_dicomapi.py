@@ -51,7 +51,7 @@ def check_dict():
 
     # リスト化されたキーを取り出して、辞書から削除
     for item in delete_keys:
-        delete_cacl_information(item)
+        delete_calc_information(item)
 
 #---------------------------------------
 def delete_calc_information(accept_id):
@@ -59,7 +59,7 @@ def delete_calc_information(accept_id):
     accept_idの情報を削除する。
     '''
 
-    del calc_informations[item]
+    del calc_informations[accept_id]
     
 #---------------------------------------
 def log_print(loglevel, message):
@@ -148,7 +148,7 @@ def add_calcinfo():
             if site == calc_info["remote-site"]:
                 site_id = site
         if site_id is None:
-            response = {"message":"missmatch remote-site id", "code":"400")
+            response = {"message":"missmatch remote-site id", "code":"400"}
             log_print(1, "(/add-calcinfo)missmatch remote-site id")
             return_api( response )
     else:
@@ -252,7 +252,7 @@ def cancel_wait_calc():
     # 既に計算が開始している
     if calc_start != "not start":
         log_print(1, "(/cancel-wait-calc) cannot cancel. calcuration have been started at the remote. accept_id(%s)"%accept_id)
-        response {"message":"calcuration have been started at the remote. accept_id(%s)"%accept_id, "code":401}
+        response = {"message":"calcuration have been started at the remote. accept_id(%s)"%accept_id, "code":401}
         #return flask.make_response(flask.jsonify(response), 401)
         return_api(response)
 
