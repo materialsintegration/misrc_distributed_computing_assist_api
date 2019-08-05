@@ -28,6 +28,30 @@ MIシステムはローカルに構築された計算機のみを使用して計
   + distcomp-notice.log：noticeレベルのログ
   + distcomp-error.log：Errorレベルのログ
 
+### MIシステムへの設定
+* gatewayへの設定
+  + /etc/httpd/conf.d/misystem.confファイルへの追記
+    ```
+    ProxyPass /mi-distcomp-api http://192.168.1.143/mi-distcomp-api
+    ProxyPassReverse /mi-distcomp-api http://192.168.1.143/mi-distcomp-api
+    ```
+    の２行を、```<VirtualHost *:443>```ディレクティブの  
+    ```
+    ProxyPass / http://192.168.1.144/
+    ProxyPassReverse / http://192.168.1.144/
+    ```
+    の直前に追記します。
+  + 再起動
+    ```
+    # systemctl restart httpd
+    ```
+* api-gwへの設定
+  api-gwへ設定を行い、MIシステムのAPI認証システムを使用可能にします。
+  * 用意するもの
+    + APIトークン（本APIを使用するためのアクセストークン）
+  * 設定方法 
+　　「マテリアルインテグレーション システム管理者ガイド 1.1」の「13.8.2. 独自のWebAPIの追加」を参考にして、api-gw/urlrwrite.xmlの内容を追記します。APIトークンの設定も行います。
+
 ## 参考文献
 ### FlaskのAPI利用法
 本APIはpythonのFlaskパッケージを使用しています。このパッケージを使用したAPIの実装のための参考文献
