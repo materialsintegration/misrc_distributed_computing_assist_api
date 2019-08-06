@@ -56,6 +56,7 @@ MIシステムはローカルに構築された計算機のみを使用して計
 ### FlaskのAPI利用法
 本APIはpythonのFlaskパッケージを使用しています。このパッケージを使用したAPIの実装のための参考文献
 * ![さくらのレンタルサーバーでFlaskを利用した住所検索APIを構築してみました](https://day-journal.com/memo/try-019/)
+* ![Flaskを使ってAPIサーバーを公開する。](http://rennnosukesann.hatenablog.com/entry/2018/07/21/155401)
 
 ### ログ出力
 本APIはsyslog機能を使用するのでその参考文献
