@@ -31,7 +31,7 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		
 		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"MIシステム側" ), wx.VERTICAL )
 		
-		fgSizer1 = wx.FlexGridSizer( 6, 3, 0, 0 )
+		fgSizer1 = wx.FlexGridSizer( 8, 3, 0, 0 )
 		fgSizer1.SetFlexibleDirection( wx.BOTH )
 		fgSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
