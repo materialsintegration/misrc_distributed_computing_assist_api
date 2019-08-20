@@ -40,11 +40,11 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText14 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText14.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText14, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText14, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_staticText13 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText13.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText13, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText13, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonCalcParams = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"calc-params", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonCalcParams, 0, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
@@ -54,7 +54,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText15 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText15.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText15, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText15, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonCalcParamsComplete = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"calc-params-complete", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonCalcParamsComplete, 1, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
@@ -64,7 +64,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText16 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText16.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText16, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText16, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonCalcStart = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"calc-start", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonCalcStart, 1, wx.RIGHT|wx.LEFT|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND, 5 )
@@ -74,7 +74,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText17 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText17.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText17, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText17, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonCalcEnd = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"calc-end", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonCalcEnd, 0, wx.RIGHT|wx.LEFT|wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
@@ -84,7 +84,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText18 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText18.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText18, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText18, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonSendResult = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"send-result", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonSendResult, 0, wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
@@ -94,7 +94,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText19 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText19.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText19, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText19, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonEndSend = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"end-send", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonEndSend, 0, wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
@@ -104,18 +104,32 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		self.m_staticText20 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText20.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText20, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText20, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_staticText22 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText22.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText22, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText22, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_staticText23 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
 		self.m_staticText23.Wrap( -1 )
-		fgSizer2.Add( self.m_staticText23, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_staticText23, 0, wx.RIGHT|wx.LEFT, 5 )
 		
 		self.m_buttonClear = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Clear", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer2.Add( self.m_buttonClear, 0, wx.ALL, 5 )
+		fgSizer2.Add( self.m_buttonClear, 0, wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_buttonGetInfo = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Info", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer2.Add( self.m_buttonGetInfo, 1, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_staticText25 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText25.Wrap( -1 )
+		fgSizer2.Add( self.m_staticText25, 0, wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_staticText26 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText26.Wrap( -1 )
+		fgSizer2.Add( self.m_staticText26, 0, wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_buttonSaveFiles = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"Save Files", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer2.Add( self.m_buttonSaveFiles, 1, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL|wx.RIGHT|wx.LEFT, 5 )
 		
 		
 		sbSizer2.Add( fgSizer2, 0, 0, 5 )
@@ -141,6 +155,8 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		self.m_buttonSendResult.Bind( wx.EVT_BUTTON, self.m_buttonSendResultOnButtonClick )
 		self.m_buttonEndSend.Bind( wx.EVT_BUTTON, self.m_buttonEndSendOnButtonClick )
 		self.m_buttonClear.Bind( wx.EVT_BUTTON, self.m_buttonClearOnButtonClick )
+		self.m_buttonGetInfo.Bind( wx.EVT_BUTTON, self.m_buttonGetInfoOnButtonClick )
+		self.m_buttonSaveFiles.Bind( wx.EVT_BUTTON, self.m_buttonSaveFilesOnButtonClick )
 	
 	def __del__( self ):
 		pass
@@ -169,6 +185,12 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		event.Skip()
 	
 	def m_buttonClearOnButtonClick( self, event ):
+		event.Skip()
+	
+	def m_buttonGetInfoOnButtonClick( self, event ):
+		event.Skip()
+	
+	def m_buttonSaveFilesOnButtonClick( self, event ):
 		event.Skip()
 	
 
