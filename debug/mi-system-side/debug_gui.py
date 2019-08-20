@@ -31,7 +31,7 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		
 		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"MIシステム側" ), wx.VERTICAL )
 		
-		fgSizer1 = wx.FlexGridSizer( 8, 3, 0, 0 )
+		fgSizer1 = wx.FlexGridSizer( 10, 3, 0, 0 )
 		fgSizer1.SetFlexibleDirection( wx.BOTH )
 		fgSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -77,17 +77,6 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_staticText7.Wrap( -1 )
 		fgSizer1.Add( self.m_staticText7, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
 		
-		self.m_buttonGetCalcInfo = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"get-calc-info", wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer1.Add( self.m_buttonGetCalcInfo, 0, wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
-		
-		self.m_staticText8 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText8.Wrap( -1 )
-		fgSizer1.Add( self.m_staticText8, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
-		
-		self.m_staticText9 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		self.m_staticText9.Wrap( -1 )
-		fgSizer1.Add( self.m_staticText9, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
-		
 		self.m_buttonStatus = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"status", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer1.Add( self.m_buttonStatus, 0, wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
 		
@@ -119,6 +108,28 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_buttonClear = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Clear", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer1.Add( self.m_buttonClear, 0, wx.ALL, 5 )
 		
+		self.m_buttonGetCalcInfo = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"get-calc-info", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer1.Add( self.m_buttonGetCalcInfo, 0, wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_staticText9 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText9.Wrap( -1 )
+		fgSizer1.Add( self.m_staticText9, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL, 5 )
+		
+		self.m_staticText8 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText8.Wrap( -1 )
+		fgSizer1.Add( self.m_staticText8, 0, wx.ALL|wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.m_buttonGetUUIDs = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"uuid(s)", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer1.Add( self.m_buttonGetUUIDs, 1, wx.EXPAND|wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_staticText27 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText27.Wrap( -1 )
+		fgSizer1.Add( self.m_staticText27, 0, wx.RIGHT|wx.LEFT, 5 )
+		
+		self.m_staticText28 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText28.Wrap( -1 )
+		fgSizer1.Add( self.m_staticText28, 0, wx.RIGHT|wx.LEFT, 5 )
+		
 		
 		sbSizer1.Add( fgSizer1, 0, wx.EXPAND, 5 )
 		
@@ -138,10 +149,11 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_buttonAddCalc.Bind( wx.EVT_BUTTON, self.m_buttonAddCalcOnButtonClick )
 		self.m_buttonAllowWaitCalc.Bind( wx.EVT_BUTTON, self.m_buttonAllowWaitCalcOnButtonClick )
 		self.m_buttonCancelWaitCalc.Bind( wx.EVT_BUTTON, self.m_buttonCancelWaitCalcOnButtonClick )
-		self.m_buttonGetCalcInfo.Bind( wx.EVT_BUTTON, self.m_buttonGetCalcInfoOnButtonClick )
 		self.m_buttonStatus.Bind( wx.EVT_BUTTON, self.m_buttonStatusOnButtonClick )
 		self.m_buttonGetCalcResult.Bind( wx.EVT_BUTTON, self.m_buttonGetCalcResultOnButtonClick )
 		self.m_buttonClear.Bind( wx.EVT_BUTTON, self.m_buttonClearOnButtonClick )
+		self.m_buttonGetCalcInfo.Bind( wx.EVT_BUTTON, self.m_buttonGetCalcInfoOnButtonClick )
+		self.m_buttonGetUUIDs.Bind( wx.EVT_BUTTON, self.m_buttonGetUUIDsOnButtonClick )
 	
 	def __del__( self ):
 		pass
@@ -157,9 +169,6 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 	def m_buttonCancelWaitCalcOnButtonClick( self, event ):
 		event.Skip()
 	
-	def m_buttonGetCalcInfoOnButtonClick( self, event ):
-		event.Skip()
-	
 	def m_buttonStatusOnButtonClick( self, event ):
 		event.Skip()
 	
@@ -167,6 +176,12 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		event.Skip()
 	
 	def m_buttonClearOnButtonClick( self, event ):
+		event.Skip()
+	
+	def m_buttonGetCalcInfoOnButtonClick( self, event ):
+		event.Skip()
+	
+	def m_buttonGetUUIDsOnButtonClick( self, event ):
 		event.Skip()
 	
 
