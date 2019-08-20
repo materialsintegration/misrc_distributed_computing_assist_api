@@ -130,6 +130,16 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_staticText28.Wrap( -1 )
 		fgSizer1.Add( self.m_staticText28, 0, wx.RIGHT|wx.LEFT, 5 )
 		
+		self.m_staticText32 = wx.StaticText( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText32.Wrap( -1 )
+		fgSizer1.Add( self.m_staticText32, 0, wx.ALL, 5 )
+		
+		self.m_textCtrl12 = wx.TextCtrl( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer1.Add( self.m_textCtrl12, 1, wx.ALL|wx.EXPAND, 5 )
+		
+		self.m_buttonForceDelete = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Force Delete", wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer1.Add( self.m_buttonForceDelete, 0, wx.ALL, 5 )
+		
 		
 		sbSizer1.Add( fgSizer1, 0, wx.EXPAND, 5 )
 		
@@ -154,6 +164,7 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_buttonClear.Bind( wx.EVT_BUTTON, self.m_buttonClearOnButtonClick )
 		self.m_buttonGetCalcInfo.Bind( wx.EVT_BUTTON, self.m_buttonGetCalcInfoOnButtonClick )
 		self.m_buttonGetUUIDs.Bind( wx.EVT_BUTTON, self.m_buttonGetUUIDsOnButtonClick )
+		self.m_buttonForceDelete.Bind( wx.EVT_BUTTON, self.m_buttonForceDeleteOnButtonClick )
 	
 	def __del__( self ):
 		pass
@@ -182,6 +193,9 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		event.Skip()
 	
 	def m_buttonGetUUIDsOnButtonClick( self, event ):
+		event.Skip()
+	
+	def m_buttonForceDeleteOnButtonClick( self, event ):
 		event.Skip()
 	
 

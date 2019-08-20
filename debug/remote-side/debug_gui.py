@@ -31,9 +31,21 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"遠隔計算機側" ), wx.VERTICAL )
 		
-		fgSizer2 = wx.FlexGridSizer( 10, 3, 0, 0 )
+		fgSizer2 = wx.FlexGridSizer( 11, 3, 0, 0 )
 		fgSizer2.SetFlexibleDirection( wx.BOTH )
 		fgSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
+		
+		self.m_staticText29 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"URL", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText29.Wrap( -1 )
+		fgSizer2.Add( self.m_staticText29, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.m_staticText30 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, u"入力値", wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText30.Wrap( -1 )
+		fgSizer2.Add( self.m_staticText30, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+		
+		self.m_staticText31 = wx.StaticText( sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		self.m_staticText31.Wrap( -1 )
+		fgSizer2.Add( self.m_staticText31, 0, wx.ALL, 5 )
 		
 		self.m_buttonCalcRequest = wx.Button( sbSizer2.GetStaticBox(), wx.ID_ANY, u"calc-request", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer2.Add( self.m_buttonCalcRequest, 0, wx.EXPAND|wx.ALIGN_CENTER_HORIZONTAL|wx.ALIGN_CENTER_VERTICAL|wx.RIGHT|wx.LEFT, 5 )
