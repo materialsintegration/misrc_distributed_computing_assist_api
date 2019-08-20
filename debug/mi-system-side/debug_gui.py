@@ -31,7 +31,7 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		
 		sbSizer1 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"MIシステム側" ), wx.VERTICAL )
 		
-		fgSizer1 = wx.FlexGridSizer( 10, 3, 0, 0 )
+		fgSizer1 = wx.FlexGridSizer( 11, 3, 0, 0 )
 		fgSizer1.SetFlexibleDirection( wx.BOTH )
 		fgSizer1.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
@@ -134,8 +134,8 @@ class MIDistCompAPIDebugGUI ( wx.Frame ):
 		self.m_staticText32.Wrap( -1 )
 		fgSizer1.Add( self.m_staticText32, 0, wx.ALL, 5 )
 		
-		self.m_textCtrl12 = wx.TextCtrl( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
-		fgSizer1.Add( self.m_textCtrl12, 1, wx.ALL|wx.EXPAND, 5 )
+		self.m_textCtrlForceDelete = wx.TextCtrl( sbSizer1.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize, 0 )
+		fgSizer1.Add( self.m_textCtrlForceDelete, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		self.m_buttonForceDelete = wx.Button( sbSizer1.GetStaticBox(), wx.ID_ANY, u"Force Delete", wx.DefaultPosition, wx.DefaultSize, 0 )
 		fgSizer1.Add( self.m_buttonForceDelete, 0, wx.ALL, 5 )
