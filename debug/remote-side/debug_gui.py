@@ -31,7 +31,7 @@ class MIDistCompAPIDebugGUIForRemote ( wx.Frame ):
 		
 		sbSizer2 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"遠隔計算機側" ), wx.VERTICAL )
 		
-		fgSizer2 = wx.FlexGridSizer( 8, 3, 0, 0 )
+		fgSizer2 = wx.FlexGridSizer( 10, 3, 0, 0 )
 		fgSizer2.SetFlexibleDirection( wx.BOTH )
 		fgSizer2.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
 		
