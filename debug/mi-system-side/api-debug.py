@@ -7,6 +7,7 @@ MIシステム用に分散型計算環境を補助するAPI群へ登録を行う
 
 import requests
 import json
+import base64
 from debug_gui import *
 
 
@@ -23,13 +24,24 @@ class api_debug(MIDistCompAPIDebugGUI):
         MIDistCompAPIDebugGUI.__init__(self, parent)
 
         self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
-        self.data = {'calc-info': {
-            'command': '/opt/mi-remote/abaqus.sh',
-            'remote-site': 'nims-dev',
-            'parameters':'',
-            'parameter_files':{
-                'XX.inp':'xxx',
-                'XX.dat':'yyy'}}}
+        self.data = {
+            'calc-info':{
+                'command': '/opt/mi-remote/abaqus.sh',
+                'remote-site': 'nims-dev',
+                'parameters':'',
+                'parameter_files':{
+                    'XX.inp':'xxx'
+                },
+                'result_files':{
+                    'XX.dat':['xxx','',''],
+                    'XX.com':['','',''],
+                    'XX.msg':['','',''],
+                    'XX.sta':['','',''],
+                    'XX.prt':['','',''],
+                    'XX.sim':['','','']
+                }
+            }
+        }
         self.session = requests.Session()
 
         self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
@@ -43,16 +55,35 @@ class api_debug(MIDistCompAPIDebugGUI):
         if ret.status_code != 200 and ret.status_code != 201:
             print("error ?:%s"%ret.text)
         else:
-            print(json.dumps(ret.json(), indent=2, ensure_ascii=False))
+            items = ret.json()
+            #print(items)
+            for accept_id in items:
+                if ("calc-info" in items[accept_id]) is False:
+                    continue
+                if ("parameter_files" in items[accept_id]["calc-info"]) is True:
+                    for item in items[accept_id]["calc-info"]["parameter_files"]:
+                        items[accept_id]["calc-info"]["parameter_files"][item] = "paramtere file contents..."
+                if ("result_files" in items[accept_id]) is True:
+                    for item in items[accept_id]["result_files"]:
+                        items[accept_id]["result_files"][item] = "return file contents..."
+                
+            #print(json.dumps(ret.json(), indent=2, ensure_ascii=False))
+            print(json.dumps(items, indent=2, ensure_ascii=False))
 
     def m_buttonAddCalcOnButtonClick( self, event ):
         '''
         add-calc APIの実行
         '''
 
+        self.data["calc-info"]["parameter_files"]["XX.inp"] = base64.b64encode(open("XX.inp", "rb").read()).decode('utf-8')
         ret = self.session.post("%s/add-calcinfo"%self.base_url, headers=self.headers, json=self.data)
 
-        self.result_out(ret)
+        print("status code:%d"%ret.status_code)
+        if ret.status_code != 200 and ret.status_code != 201:
+            print("error ?:%s"%ret.text)
+        else:
+            print("accept_id = %s"%ret.json()["accept_id"])
+        #self.result_out(ret)
         event.Skip()
     
     def m_buttonAllowWaitCalcOnButtonClick( self, event ):
@@ -66,7 +97,8 @@ class api_debug(MIDistCompAPIDebugGUI):
 
         ret = self.session.post("%s/allow-wait-calc"%self.base_url, headers=self.headers, json=data)
 
-        self.result_out(ret)
+        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+        #self.result_out(ret)
         event.Skip()
     
     def m_buttonCancelWaitCalcOnButtonClick( self, event ):
@@ -80,7 +112,8 @@ class api_debug(MIDistCompAPIDebugGUI):
 
         ret = self.session.post("%s/cancel-wait-calc"%self.base_url, headers=self.headers, json=data)
 
-        self.result_out(ret)
+        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+        #self.result_out(ret)
         event.Skip()
     
     def m_buttonGetCalcInfoOnButtonClick( self, event ):
@@ -104,7 +137,8 @@ class api_debug(MIDistCompAPIDebugGUI):
 
         ret = self.session.get("%s/calc-status?accept_id=%s"%(self.base_url, accept_id), headers=self.headers)
 
-        self.result_out(ret)
+        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+        #self.result_out(ret)
         event.Skip()
     
     def m_buttonGetCalcResultOnButtonClick( self, event ):
@@ -118,9 +152,70 @@ class api_debug(MIDistCompAPIDebugGUI):
 
         ret = self.session.get("%s/get-calc-result?accept_id=%s"%(self.base_url, accept_id), headers=self.headers, json=data)
 
-        self.result_out(ret)
+        result = ret.json()
+        if ("result-info" in result) is True:
+            for filename in result["result-info"]["result_files"]:
+                mime_type0 = result["result-info"]["result_files"][filename][1]
+                mime_type1 = result["result-info"]["result_files"][filename][2]
+                print("result file = %s(%s; %s)"%(filename, mime_type0, mime_type1))
+                if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
+                    outfile = open(filename, "w")
+                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode("utf-8"))
+                    outfile.close
+                else:
+                    outfile = open(filename, "bw")
+                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode())
+                    outfile.close
+
+        #self.result_out(ret)
         event.Skip()
+
+    def m_buttonClearOnButtonClick(self, event):
+        '''
+        入力欄のクリア
+        '''
+
+        self.m_textCtrlGetCalcResult.SetValue("")
+        self.m_textCtrlStatus.SetValue("")
+        self.m_textCtrlCancelWaitCalc.SetValue("")
+        self.m_textCtrlAllowWaitCalc.SetValue("")
+        self.m_textCtrlForceDelete.SetValue("")
         
+        event.Skip()
+
+    def m_buttonGetUUIDsOnButtonClick( self, event ):
+        '''
+        登録済みのUUIDの表示
+        '''
+
+        ret = self.session.get("%s/get-calcinfo"%self.base_url, headers=self.headers)
+
+        print("status code:%d"%ret.status_code)
+        if ret.status_code != 200 and ret.status_code != 201:
+            print("error ?:%s"%ret.text)
+        else:
+            items = ret.json()
+            for item in items:
+                print(item)
+        
+        event.Skip()
+
+    def m_buttonForceDeleteOnButtonClick( self, event ):
+        '''
+        cancel-wait-calc APIの実行(Force delete)
+        '''
+
+        accept_id = self.m_textCtrlForceDelete.GetValue()
+        data = {}
+        data['accept_id'] = accept_id
+        data['delete'] = 'force'
+
+        ret = self.session.post("%s/cancel-wait-calc"%self.base_url, headers=self.headers, json=data)
+
+        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+        #self.result_out(ret)
+        event.Skip()
+    
 def main():
     '''
     開始点
