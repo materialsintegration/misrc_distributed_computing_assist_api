@@ -8,6 +8,7 @@ MIシステム用に分散型計算環境を補助するAPI群へ登録を行う
 import requests
 import json
 import base64
+import subprocess
 from debug_gui import *
 
 
@@ -30,7 +31,7 @@ class api_debug(MIDistCompAPIDebugGUI):
                 'remote-site': 'nims-dev',
                 'parameters':'',
                 'parameter_files':{
-                    'XX.inp':'xxx'
+                    'XX.inp':['xxx','','']
                 },
                 'result_files':{
                     'XX.dat':['xxx','',''],
@@ -38,7 +39,8 @@ class api_debug(MIDistCompAPIDebugGUI):
                     'XX.msg':['','',''],
                     'XX.sta':['','',''],
                     'XX.prt':['','',''],
-                    'XX.sim':['','','']
+                    'XX.sim':['','',''],
+                 #   'XX.odb':['','','']
                 }
             }
         }
@@ -62,7 +64,7 @@ class api_debug(MIDistCompAPIDebugGUI):
                     continue
                 if ("parameter_files" in items[accept_id]["calc-info"]) is True:
                     for item in items[accept_id]["calc-info"]["parameter_files"]:
-                        items[accept_id]["calc-info"]["parameter_files"][item] = "paramtere file contents..."
+                        items[accept_id]["calc-info"]["parameter_files"][item][0] = "paramtere file contents..."
                 if ("result_files" in items[accept_id]) is True:
                     for item in items[accept_id]["result_files"]:
                         items[accept_id]["result_files"][item] = "return file contents..."
@@ -75,7 +77,18 @@ class api_debug(MIDistCompAPIDebugGUI):
         add-calc APIの実行
         '''
 
-        self.data["calc-info"]["parameter_files"]["XX.inp"] = base64.b64encode(open("XX.inp", "rb").read()).decode('utf-8')
+        for filename in self.data["calc-info"]["parameter_files"]:
+        #self.data["calc-info"]["parameter_files"]["XX.inp"][0] = base64.b64encode(open("XX.inp", "rb").read()).decode('utf-8')
+            p = subprocess.Popen("file -i -b %s"%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p.wait()
+            stdout_data = p.stdout.read()
+            result = stdout_data.decode('utf-8').split("\n")[0]
+            results = result.split()
+            mime_types = results[0].split("/")
+            self.data["calc-info"]["parameter_files"][filename][0] = base64.b64encode(open(filename, "rb").read()).decode('utf-8')
+            self.data["calc-info"]["parameter_files"][filename][1] = results[0]
+            self.data["calc-info"]["parameter_files"][filename][2] = results[1]
+
         ret = self.session.post("%s/add-calcinfo"%self.base_url, headers=self.headers, json=self.data)
 
         print("status code:%d"%ret.status_code)
@@ -164,7 +177,7 @@ class api_debug(MIDistCompAPIDebugGUI):
                     outfile.close
                 else:
                     outfile = open(filename, "bw")
-                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode())
+                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0].encode()))
                     outfile.close
 
         #self.result_out(ret)
