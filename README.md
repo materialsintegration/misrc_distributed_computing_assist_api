@@ -57,9 +57,14 @@ MIシステムはローカルに構築された計算機のみを使用して計
 本APIはpythonのFlaskパッケージを使用しています。このパッケージを使用したAPIの実装のための参考文献
 * [さくらのレンタルサーバーでFlaskを利用した住所検索APIを構築してみました](https://day-journal.com/memo/try-019/)
 * [Flaskを使ってAPIサーバーを公開する。](http://rennnosukesann.hatenablog.com/entry/2018/07/21/155401)
+* [Flaskのrequest.argsでパラメータ処理について](https://qiita.com/uokada/items/7cc35fbe2f956615259b)
 
 ### ログ出力
 本APIはsyslog機能を使用するのでその参考文献
 * [pythonでのsyslogの使い方](https://qiita.com/Esfahan/items/7888914dca0e8d23eac3)
 * [Python:mod_wsgiのログをrsyslogとlogrotateでローテーションする](https://blog.amedama.jp/entry/2015/09/13/000901)
 
+### base64エンコード
+本APIはJSON形式でデータやファイル内容の受け渡しを行うが、そのためにはbase64エンコードが必要である。そのための参考資料を以下に記述する。
+* [base64によるエンコードとデコード](python.ambitious-engineer.com/archives/2066)
+* [BASE64でファイルのエンコード・デコード](https://algorithm.joho.info/programming/python/base64-encode-decode-py/)
