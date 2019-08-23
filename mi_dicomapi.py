@@ -639,7 +639,7 @@ def send_results():
     遠隔計算機から計算結果の送信
     '''
 
-    log_print(3, "(/%s) recirved result file(s)"%url_id)
+    log_print(3, "(/send-results) recirved result file(s)")
     # accept_id他のチェック
     retval, accept_id = check_accept_id_in_requestbody("send-results")
     if retval is False:
