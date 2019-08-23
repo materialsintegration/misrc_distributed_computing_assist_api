@@ -19,7 +19,7 @@ class MIDistCompAPIStatusWindow ( wx.Frame ):
 	def __init__( self, parent ):
 		wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 585,365 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
 		
-		#self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 		
 		bSizer5 = wx.BoxSizer( wx.VERTICAL )
 		
@@ -43,7 +43,6 @@ class MIDistCompAPIStatusWindow ( wx.Frame ):
 		
 		self.SetSizer( bSizer5 )
 		self.Layout()
-		self.m_statusBar1 = self.CreateStatusBar( 1, wx.STB_SIZEGRIP, wx.ID_ANY )
 		
 		self.Centre( wx.BOTH )
 	
