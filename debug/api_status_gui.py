@@ -31,13 +31,6 @@ class MIDistCompAPIStatusWindow ( wx.Frame ):
 		
 		sbSizer3 = wx.StaticBoxSizer( wx.StaticBox( self, wx.ID_ANY, u"API Internal Status" ), wx.VERTICAL )
 		
-		fgSizer4 = wx.FlexGridSizer( 0, 2, 0, 0 )
-		fgSizer4.SetFlexibleDirection( wx.BOTH )
-		fgSizer4.SetNonFlexibleGrowMode( wx.FLEX_GROWMODE_SPECIFIED )
-		
-		
-		sbSizer3.Add( fgSizer4, 1, wx.EXPAND, 5 )
-		
 		self.m_listCtrl1 = wx.ListCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT )
 		sbSizer3.Add( self.m_listCtrl1, 1, wx.ALL|wx.EXPAND, 5 )
 		
@@ -50,6 +43,7 @@ class MIDistCompAPIStatusWindow ( wx.Frame ):
 		
 		self.SetSizer( bSizer5 )
 		self.Layout()
+		self.m_statusBar1 = self.CreateStatusBar( 1, wx.STB_SIZEGRIP, wx.ID_ANY )
 		
 		self.Centre( wx.BOTH )
 	
