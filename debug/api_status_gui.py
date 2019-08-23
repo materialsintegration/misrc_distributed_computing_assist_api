@@ -38,7 +38,7 @@ class MIDistCompAPIStatusWindow ( wx.Frame ):
 		
 		sbSizer3.Add( fgSizer4, 1, wx.EXPAND, 5 )
 		
-		self.m_listCtrl1 = wx.ListCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_ICON )
+		self.m_listCtrl1 = wx.ListCtrl( sbSizer3.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.LC_REPORT )
 		sbSizer3.Add( self.m_listCtrl1, 1, wx.ALL|wx.EXPAND, 5 )
 		
 		
