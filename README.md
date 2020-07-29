@@ -70,40 +70,40 @@ MIシステムはローカルに構築された計算機のみを使用して計
 ## リポジトリ構成
 
 本プロジェクトは以下のようなディレクトリ構成となっている。
-├── README.md
-├── debug
-│   ├── api_status.py
-│   ├── api_status_gui.py
-│   ├── api_status_gui.pyc
-│   ├── mi-system-side
-│   │   ├── XX.com
-│   │   ├── XX.dat
-│   │   ├── XX.inp
-│   │   ├── XX.msg
-│   │   ├── XX.prt
-│   │   ├── XX.sim
-│   │   ├── XX.sta
-│   │   ├── aaa.bin
-│   │   ├── add-calc.py
-│   │   ├── allow-wait-calc.py
-│   │   ├── api-debug.py
-│   │   ├── cancel-wait-calc.py
-│   │   ├── debug-gui.fbp
-│   │   ├── debug_gui.py
-│   │   ├── debug_gui.pyc
-│   │   ├── get-calc-info.py
-│   │   ├── mi-system-wf.py
-│   │   └── result_files
-│   └── remote-side
-│       ├── api-debug.py
-│       ├── debug_gui.py
-│       └── mi-system-remote.py
-├── logging.cfg
-├── mi_dicomapi.py
-├── mi_dicomapi_infomations.py
-└── syslogs
-    ├── rsyslog.conf.old
-    └── rsyslog.patch
+├── README.md  
+├── debug  
+│   ├── api_status.py  
+│   ├── api_status_gui.py  
+│   ├── api_status_gui.pyc  
+│   ├── mi-system-side  
+│   │   ├── XX.com  
+│   │   ├── XX.dat  
+│   │   ├── XX.inp  
+│   │   ├── XX.msg  
+│   │   ├── XX.prt  
+│   │   ├── XX.sim  
+│   │   ├── XX.sta  
+│   │   ├── aaa.bin  
+│   │   ├── add-calc.py  
+│   │   ├── allow-wait-calc.py  
+│   │   ├── api-debug.py  
+│   │   ├── cancel-wait-calc.py  
+│   │   ├── debug-gui.fbp  
+│   │   ├── debug_gui.py  
+│   │   ├── debug_gui.pyc  
+│   │   ├── get-calc-info.py  
+│   │   ├── mi-system-wf.py  
+│   │   └── result_files  
+│   └── remote-side  
+│       ├── api-debug.py  
+│       ├── debug_gui.py  
+│       └── mi-system-remote.py  
+├── logging.cfg  
+├── mi_dicomapi.py  
+├── mi_dicomapi_infomations.py  
+└── syslogs  
+    ├── rsyslog.conf.old  
+    └── rsyslog.patch  
 
 * README.md：このファイル
 * logging.cfg：syslog追加設定ファイル
@@ -125,9 +125,9 @@ MIシステムはローカルに構築された計算機のみを使用して計
 * ワークフローからの入力ファイルのアップロード、分散環境資源計算機からの入力ファイルのダウンロード。
 * 分散環境資源計算機からの結果ファイルのアップロード、ワークフローからの結果ファイルのダウンロード。
 
-※ 本プロジェクトはプロトタイプであり、計算依頼のプログラムの指定はあらかじめ取り決めたものだけとする。
-※ 本プロジェクトを使用可能な分散環境資源計算機は同様にあらかじめ決められたものだけとする。
-※ 計算依頼されて動作するプログラムはあらかじめ分散環境資源計算機にインストールされたスクリプトのみとする。
+※ 本プロジェクトはプロトタイプであり、計算依頼のプログラムの指定はあらかじめ取り決めたものだけとする。  
+※ 本プロジェクトを使用可能な分散環境資源計算機は同様にあらかじめ決められたものだけとする。  
+※ 計算依頼されて動作するプログラムはあらかじめ分散環境資源計算機にインストールされたスクリプトのみとする。  
 
 ### MIシステム側
 APIとして機能する。デーモンとして動作させる。用意するパラメータファイルはないが、このバージョンでは接続可能なサイト名、サイト毎に利用可能なプログラム名などの情報はプログラム内に直接記述する。
