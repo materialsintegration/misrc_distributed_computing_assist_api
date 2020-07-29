@@ -1,4 +1,9 @@
 #!python3.6
+# Copyright (c) The University of Tokyo and
+# National Institute for Materials Science (NIMS). All rights reserved.
+# This document may not be reproduced or transmitted in any form,
+# in whole or in part, without the express written permission of
+# the copyright owners.
 # -*- coding: utf-8 -*-
 
 '''
@@ -16,6 +21,12 @@ from mi_dicomapi_infomations import *
 import logging
 from logging import config
 import socket
+if sys.version_info[0] <= 2:
+    import ConfigParser
+    #from urlparse import urlparse
+else:
+    import configparser
+    #from urllib.parse import urlparse
 
 logging.config.fileConfig("./logging.cfg")
 logger = logging.getLogger("__name__")
@@ -23,13 +34,15 @@ logger = logging.getLogger("__name__")
 app = flask.Flask(__name__)
  
 calc_informations = {}           # CalcInfomationを格納する
-remote_site_ids = ["nims-dev", "u-tokyo-enokiLab", "uacj", "ihi", "kobelco"]
+#remote_site_ids = ["nims-dev", "u-tokyo-enokiLab", "uacj", "ihi", "kobelco"]
+remote_site_ids = []
 # 遠隔側で実行可能なコマンドの辞書(遠隔サイトIDをキーに、コマンドのリスト)
-valid_commands = {"nims-dev":["/opt/mi-remote/abaqus.sh",],
-                  "u-tokyo-enokiLab":[],
-                  "uacj":[],
-                  "ihi":[],
-                  "kobelco":[]}
+#valid_commands = {"nims-dev":["/opt/mi-remote/abaqus.sh",],
+#                  "u-tokyo-enokiLab":[],
+#                  "uacj":[],
+#                  "ihi":[],
+#                  "kobelco":[]}
+valid_commands = {}
 BASE_URL = "mi-distcomp-api"     # ベースURL
 
 #==================== 補助関数   ===========================
@@ -744,15 +757,44 @@ if __name__ == "__main__":
 
     ip_address = "127.0.0.1"
     port_num = "50000"
-    if param_len == 3:
-        ip_address = sys.argv[1]
-        port_num = sys.argv[2]
-        print("%s: set listen ip_address to %s"%(datetime.datetime.now(), ip_address))
-        print("%s: set listen port number to %s"%(datetime.datetime.now(), port_num))
-    else:
-        print("%s: not define listen ip or port. exit"%datetime.datetime.now())
-        sys.exit(1)
+    #if param_len == 3:
+    #    ip_address = sys.argv[1]
+    #    port_num = sys.argv[2]
+    #    print("%s: set listen ip_address to %s"%(datetime.datetime.now(), ip_address))
+    #    print("%s: set listen port number to %s"%(datetime.datetime.now(), port_num))
+    #else:
+    #    print("%s: not define listen ip or port. exit"%datetime.datetime.now())
+    #    sys.exit(1)
 
+    # iniファイルの読み込み
+    parser = configparser.ConfigParser()
+    inifilename = "./mi_distributed_computing_assist.ini"
+    if os.path.exists(inifilename) is True:
+        parser.read(inifilename)
+    # 許可サイトの読み込み
+    if parser.has_section("RemoteSites") is True:
+        remote_site_ids = parser.get("RemoteSites", "remote_site_ids").split()
+    print("remote servers")
+    for server in remote_site_ids:
+        print("  %s"%server)
+        if parser.has_section(server) is True:
+            valid_commands[server] = []
+            commands = parser.get(server, "commands").split()
+            for command in commands:
+                valid_commands[server].append(command)
+
+    print("%15s : commands"%"server")
+    for item in valid_commands:
+        print("%15s : %s"%(item, valid_commands[item]))
+    # 待ち受けアドレスとポート番号
+    if parser.has_section("Server") is True:
+        if parser.has_option("Server", "ipaddress") is True:
+            ipaddress = parser.get("Server", "ipaddress")
+        if parser.has_option("Server", "portnumber") is True:
+            port_num = parser.get("Server", "portnumber")
+
+    print("Waiting IPaddress / Port Number")
+    print("      %s / %s"%(ipaddress, port_num))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.debug = True
     app.run(host=ip_address, port=port_num)

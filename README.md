@@ -11,6 +11,8 @@ MIシステムはローカルに構築された計算機のみを使用して計
 ### rsyslogの設定
 本APIはログをsyslog の機能を使用して/var/log/distcomp-api以下に記録するように作られている。そのための手順を記述する。
 
+※ これはAPIサーバー上でのみ実施する項目である。
+
 * rsyslog.confの変更と再起動   
   以下の手順を実行する。実行はrootまたはsudoなどで行う。
   ```
@@ -29,6 +31,9 @@ MIシステムはローカルに構築された計算機のみを使用して計
   + distcomp-error.log：Errorレベルのログ
 
 ### MIシステムへの設定
+
+※ これはAPIサーバー上でのみ実施する項目である。
+
 * gatewayへの設定
   + /etc/httpd/conf.d/misystem.confファイルへの追記
     ```
@@ -45,14 +50,25 @@ MIシステムはローカルに構築された計算機のみを使用して計
     ```
     # systemctl restart httpd
     ```
-* api-gwへの設定
+* api-gwへの設定  
   api-gwへ設定を行い、MIシステムのAPI認証システムを使用可能にします。
   * 用意するもの
     + APIトークン（本APIを使用するためのアクセストークン）
   * 設定方法 
-　　「マテリアルインテグレーション システム管理者ガイド 1.1」の「13.8.2. 独自のWebAPIの追加」を参考にして、api-gw/urlrwrite.xmlの内容を追記します。APIトークンの設定も行います。
+　　- urlrewriteファイル。  
+      「マテリアルインテグレーション システム管理者ガイド 1.1」の「13.8.2. 独自のWebAPIの追加」を参考にして、~/tomcat/conf/urlrewrite.xmlへapi-gw/urlrwrite.xmlの内容を追記します。
+    ```
+    <api name="mi-distcomp-api">
+        <database>mi-distcomp-api</database>
+        <requestPattern>/mi-distcomp-api</requestPattern>
+        <endhost>http://192.168.1.55:8082</endhost>
+        <limitcall>2147483647</limitcall>
+    </api>
+    - APIトークン
+    ```
 
 ## リポジトリ構成
+
 本プロジェクトは以下のようなディレクトリ構成となっている。
 ├── README.md
 ├── debug
