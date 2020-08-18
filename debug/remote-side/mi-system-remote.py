@@ -18,12 +18,13 @@ class mi_remote(object):
     APIデバッグ、GUI版
     '''
 
-    def __init__(self, siteId, baseUrl):
+    def __init__(self, siteId, baseUrl, token):
         '''
         初期化
         '''
 
-        self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        #self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        self.headers={'Authorization': 'Bearer %s'%token, 'Content-Type': 'application/json'}
         self.session = requests.Session()
 
         #self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
@@ -317,17 +318,19 @@ def main():
         sys.exit(1)
 
     if len(sys.argv) <= 2:
-        print("python %s <site id> <base url>")
+        print("python %s <site id> <base url> <token>")
         print("")
         print("Usage:")
         print("      site id : one of 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco'")
         print("      base url: MI system top URL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
+        print("        token : 64文字のMIntシステムのAPIへアクセスするためのトークン")
         print(len(sys.argv))
         sys.exit(1)
 
-    print("base url = %s"%sys.argv[2])
     print("site id = %s"%sys.argv[1])
-    api_prog = mi_remote(sys.argv[1], sys.argv[2])
+    print("base url = %s"%sys.argv[2])
+    print(" token = %s"%sys.argv[3])
+    api_prog = mi_remote(sys.argv[1], sys.argv[2], sys.argv[3])
 
     api_prog.request_status = None
     while True:
