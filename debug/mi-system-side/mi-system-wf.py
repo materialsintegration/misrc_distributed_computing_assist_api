@@ -12,8 +12,6 @@ import subprocess
 import time
 import sys, os
 
-if ("no_proxy" in
-
 class mi_workflow(object):
     '''
     API WF側
