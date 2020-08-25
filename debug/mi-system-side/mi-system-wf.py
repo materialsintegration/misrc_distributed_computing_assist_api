@@ -96,6 +96,7 @@ class mi_workflow(object):
         ret = self.session.post("%s/add-calcinfo"%self.base_url, headers=self.headers, json=self.data)
 
         print("status code:%d"%ret.status_code)
+        print("return contents:%s"%ret.text)
         if ret.status_code != 200 and ret.status_code != 201:
             print("error ?:%s"%ret.text)
             return False
