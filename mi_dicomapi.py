@@ -195,7 +195,7 @@ def add_calcinfo():
     if ("calc-info" in flask.request.get_json()) is False:
         message = {"message":"no command entry", "code":400}
         log_print(1, "(/add-calcinfo)no command entry from MI system when calculation data regist.")
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
         #return flask.make_response(flask.jsonify(response), 400)
 
     calc_info = flask.request.get_json().get("calc-info")
@@ -208,11 +208,11 @@ def add_calcinfo():
         if site_id is None:
             message = {"message":"missmatch remote-site id", "code":"400"}
             log_print(1, "(/add-calcinfo)missmatch remote-site id")
-            return(make_api_response( message ))
+            return(make_api_response( message, status_code=400 ))
     else:
         message = {"message":"no remote-site id", "code":400}
         log_print(1, "(/add-calcinfo)no remote-site id")
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # コマンドの確認
     command_name = None
@@ -224,12 +224,12 @@ def add_calcinfo():
             message = {"message":"invalid command name(%s)"%calc_info["command"], "code":401}
             log_print(1, "(/add-calcinfo)invalid command entry(%s)"%calc_info["command"])
             #return flask.make_response(flask.jsonify(response), 401)
-            return(make_api_response(message))
+            return(make_api_response(message, status_code=400))
     else:
         message = {"message":"no command entry", "code":400}
         log_print(1, "(/add-calcinfo)no command entry")
         #return flask.make_response(flask.jsonify(response),400)
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # パラメータとファイルの確認
     # ToDO:
@@ -240,7 +240,7 @@ def add_calcinfo():
         message = {"message":"duplicate uuid", "code":400}
         log_print(1, "(/add-calcinfo)duplicate accept_id has been established.")
         #return flask.make_response(flask.jsonify(response), 400)
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # 登録情報の確認（時間超過を判定）
     check_dict()
@@ -268,11 +268,11 @@ def allow_wait_calc():
     retval, accept_id = check_accept_id_in_requestbody("allow-wait-calc")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     retval, message = check_accept_id(accept_id, "aalow-wait-calc")
     if retval is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     message = {"accept_id":accept_id}
     calc_status = calc_informations[accept_id]["calc_status"]
@@ -283,14 +283,14 @@ def allow_wait_calc():
         log_print(1, "(/allow-wait-calc) cannot wait allow. calcuration have been started at the remote. accept_id(%s)"%accept_id)
         message = {"message":"calcuration have been started at the remote. accept_id(%s)"%accept_id, "code":401}
         #return flask.make_response(flask.jsonify(response), 401)
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # すでにallow-wait-calcしている
     if wait_allow != "none":
         log_print(1, "(/allow-wait-calc) already wait calcurate. accept_id(%s)"%accept_id)
         message = {"message":"already wait calcurate. accept_id(%s)"%accept_id, "code":401}
         #return flask.make_response(flask.jsonify(response), 401)
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # Wait開始登録
     calc_informations[accept_id]["wait_allow"] = datetime.datetime.now()
@@ -309,11 +309,11 @@ def cancel_wait_calc():
     # accept_id他のチェック
     retval, accept_id = check_accept_id_in_requestbody("cancel-wait-calc")
     if retval is False:
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     retval, message = check_accept_id(accept_id, "cancel-wait-calc")
     if retval is False:
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     message = {"accept_id":accept_id}
     calc_status = calc_informations[accept_id]["calc_status"]
@@ -331,14 +331,14 @@ def cancel_wait_calc():
             log_print(1, "(/cancel-wait-calc) cannot cancel. calcuration have been started at the remote. (status = %s / accept_id = %s)"%(calc_status, accept_id))
             message = {"message":"calcuration have been started at the remote. (status = %s / accept_id = %s)"%(calc_status, accept_id), "code":401}
             #return flask.make_response(flask.jsonify(response), 401)
-            return(make_api_response(message))
+            return(make_api_response(message, status_code=400))
     
         # まだallow waitしていない
         if wait_allow == "none":
             log_print(1, "(/cancel-wait-calc) cannot cancel. calcuration have not been allow-wait. accept_id(%s)"%accept_id)
             message = {"message":"calcuration have not been allow-wait. accept_id(%s)"%accept_id, "code":401}
             #return flask.make_response(flask.jsonify(response), 401)
-            return(make_api_response(message))
+            return(make_api_response(message, status_code=400))
 
     # 指定されたaccept_idの情報を削除する。
     delete_calc_information(accept_id)
@@ -357,13 +357,13 @@ def calc_status():
     # accept_id他のチェック
     retval, accept_id = check_id_in_requestargs("accept_id", "calc-status")
     if retval is False:
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # accept_idのデータがあるか？
     if (accept_id in calc_informations) is False:
         log_print(1, "(/status) There is no information about the id(%s)"%accept_id)
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     log_print(1, "(/status) status:%s"%calc_informations[accept_id]["calc_status"])
     status = {"message":"status:%s"%calc_informations[accept_id]["calc_status"], "code":200}
@@ -380,13 +380,13 @@ def get_calc_result():
     # accept_id他のチェック
     retval, accept_id = check_id_in_requestargs("accept_id", "get-calc-result")
     if retval is False:
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # accept_idのデータがあるか？
     if (accept_id in calc_informations) is False:
         log_print(1, "(/status) There is no information about the id(%s)"%accept_id)
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     infor = calc_informations[accept_id]
 
@@ -398,7 +398,7 @@ def get_calc_result():
     else:
         log_print(1, "(/get-calc-result) calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id))
         message = {"message":"calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id), "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # 指定されたaccept_idの情報を削除する。
     delete_calc_information(accept_id)
@@ -455,7 +455,7 @@ def calc_request():
     # site_id他のチェック
     retval, site_id = check_id_in_requestargs("site_id", "calc-request")
     if retval is False:
-        return(make_api_response(site_id))
+        return(make_api_response(site_id, status_code=400))
 
     # site_idのデータがあるか？
     accept_id = None
@@ -468,11 +468,11 @@ def calc_request():
     if accept_id is None:
         log_print(1, "(/calc-request) There is no information about the your site-id(%s)"%site_id)
         message = {"message":"There is no information about the your site id(%s)"%site_id, "code":401}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
 
     infor = {}
@@ -492,17 +492,17 @@ def calc_params():
     retval, site_id = check_id_in_requestargs("site_id", "calc-params")
     if retval is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     retval, accept_id = check_id_in_requestargs("accept_id", "calc-params")
     if retval is False:
         message = accept_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-params")
 
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # 待ち受け中かの確認
     url_id = "calc-params"
@@ -511,7 +511,7 @@ def calc_params():
     else:
         log_print(1, "(/%s) There is no information which can calc(no calc wating), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc wating), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     log_print(1, "(/calc-params) return information")
     #message = {"message":"There is information that can calc", "code":200, "accept_id":accept_id}
@@ -531,18 +531,18 @@ def calc_params_complete():
     retval, accept_id = check_accept_id_in_requestbody("calc-params-complete")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("calc-params-complet")
     if ret is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # 対象か？
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-params-complete")
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # パラメータ送信中かの確認
     url_id = "calc-params-complete"
@@ -551,7 +551,7 @@ def calc_params_complete():
     else:
         log_print(1, "(/%s) There is no information which can calc(no params sending), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no params sending), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     calc_informations[accept_id]["calc_status"] = "complete send"
     message = {"message":"ok", "code":200}
@@ -568,18 +568,18 @@ def calc_start():
     retval, accept_id = check_accept_id_in_requestbody("calc-start")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("calc-start")
     if ret is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-start")
 
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # パラメータ送信完了しているかの確認
     url_id = "calc-start"
@@ -588,7 +588,7 @@ def calc_start():
     else:
         log_print(1, "(/%s) There is no information which can calc(no complete send), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no complete send), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     calc_informations[accept_id]["calc_status"] = "running"
     message = {"message":"ok", "code":200}
@@ -605,18 +605,18 @@ def calc_end():
     retval, accept_id = check_accept_id_in_requestbody("calc-end")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("calc-end")
     if ret is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-end")
 
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     url_id = "calc-end"
 
@@ -626,20 +626,20 @@ def calc_end():
     else:
         log_print(1, "(/%s) There is no information which can calc(no calc running), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc running), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # bodyのresultキーの確認
     if ("result" in flask.request.get_json()) is False:
         log_print(1, "(/%s) There is no 'result' key in request body"%url_id)
         message = {"message":"There is no 'result' key in request body", "code":401}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     result = flask.request.get_json()['result']
 
     if result != "calc end" and result != "abnormal":
         log_print(1, "(/%s) unknown calc status(%s)"%(url_id, result))
         message = {"message":"unknown calc status(%s)"%result, "code":402}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     calc_informations[accept_id]["calc_status"] = result
     message = {"message":"ok", "code":200}
@@ -657,17 +657,17 @@ def send_results():
     retval, accept_id = check_accept_id_in_requestbody("send-results")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("send-results")
     if ret is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "send-results")
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     url_id = "calc-end"
 
@@ -677,13 +677,13 @@ def send_results():
     else:
         log_print(1, "(/%s) There is no information which can recieve(no calc end), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can recieve(no calc end), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # bodyのresult_filesキーの確認
     if ("result_files" in flask.request.get_json()) is False:
         log_print(1, "(/%s) There is no 'result_files' key in request body"%url_id)
         message = {"message":"There is no 'result_files' key in request body", "code":401}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     result_files = flask.request.get_json()['result_files']
 
@@ -703,17 +703,17 @@ def end_send():
     retval, accept_id = check_accept_id_in_requestbody("end-send")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id))
+        return(make_api_response(accept_id, status_code=400))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("end-send")
     if ret is False:
         message = site_id
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "end-send")
     if ret is False:
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     url_id = "calc-end"
 
@@ -724,20 +724,20 @@ def end_send():
     else:
         log_print(1, "(/%s) There is no information which can recieve end(no calc end or recieving), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can recieve end(no calc end or recieving), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     # bodyのresultキーの確認
     if ("result" in flask.request.get_json()) is False:
         log_print(1, "(/%s) There is no 'result' key in request body"%url_id)
         message = {"message":"There is no 'result' key in request body", "code":401}
-        return(make_api_response(message))
+        return(make_api_response(message, status_code=400))
 
     result = flask.request.get_json()['result']
 
     if result != "end send":
         log_print(1, "(/%s) unknown string in end-send body"%(result, url_id))
         message = {"message":"unknown string(%s) in end-send body"%(result, url_id)}
-        return(make_spi_response(message))
+        return(make_spi_response(message, status_code=400))
 
     calc_informations[accept_id]["calc_status"] = "got return"
     message = {"message":"ok", "code":200}
