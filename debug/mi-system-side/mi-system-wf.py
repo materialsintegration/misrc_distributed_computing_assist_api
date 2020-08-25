@@ -183,7 +183,9 @@ class mi_workflow(object):
 
         code = ret.json()["code"]
         message = ret.json()["message"]
-        #print("code = %s / message = %s"%(code, message))
+        print("code = %s / message = %s"%(code, message), flush=True)
+        if message == "status:abnormal":
+            return False, message
 
         if code != 200:
             return False, message
