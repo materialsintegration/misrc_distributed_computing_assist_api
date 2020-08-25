@@ -58,9 +58,9 @@ class mi_workflow(object):
         レスポンスの表示
         '''
 
-        print("status code:%d"%ret.status_code)
+        print("status code:%d"%ret.status_code, flush=True)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
         else:
             items = ret.json()
             #print(items)
@@ -75,7 +75,7 @@ class mi_workflow(object):
                         items[accept_id]["result_files"][item] = "return file contents..."
                 
             #print(json.dumps(ret.json(), indent=2, ensure_ascii=False))
-            print(json.dumps(items, indent=2, ensure_ascii=False))
+            print(json.dumps(items, indent=2, ensure_ascii=False), flush=True)
 
     def miDistApiAddCalc(self):
         '''
@@ -95,14 +95,14 @@ class mi_workflow(object):
 
         ret = self.session.post("%s/add-calcinfo"%self.base_url, headers=self.headers, json=self.data)
 
-        print("status code:%d"%ret.status_code)
-        print("return contents:%s"%ret.text)
+        print("status code:%d"%ret.status_code, flush=True)
+        print("return contents:%s"%ret.text, flush=True)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False
         else:
             self.accept_id = ret.json()["accept_id"]
-            print("accept_id = %s"%self.accept_id)
+            print("accept_id = %s"%self.accept_id, flush=True)
 
         return True
     
@@ -116,12 +116,12 @@ class mi_workflow(object):
 
         ret = self.session.post("%s/allow-wait-calc"%self.base_url, headers=self.headers, json=data)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
         code = ret.json()["code"]
         message = ret.json()["message"]
-        print("code = %s / message = %s"%(code, message))
+        print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
             return False, message
@@ -138,12 +138,12 @@ class mi_workflow(object):
 
         ret = self.session.post("%s/cancel-wait-calc"%self.base_url, headers=self.headers, json=data)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
         code = ret.json()["code"]
         message = ret.json()["message"]
-        print("code = %s / message = %s"%(code, message))
+        print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
             return False, message
@@ -157,12 +157,12 @@ class mi_workflow(object):
 
         ret = self.session.get("%s/get-calcinfo"%self.base_url, headers=self.headers)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
         code = ret.json()["code"]
         message = ret.json()["message"]
-        print("code = %s / message = %s"%(code, message))
+        print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
             return False, message
@@ -176,7 +176,7 @@ class mi_workflow(object):
 
         ret = self.session.get("%s/calc-status?accept_id=%s"%(self.base_url, self.accept_id), headers=self.headers)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
         #print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
@@ -200,7 +200,7 @@ class mi_workflow(object):
 
         ret = self.session.get("%s/get-calc-result?accept_id=%s"%(self.base_url, self.accept_id), headers=self.headers, json=data)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
         code = ret.json()["code"]
@@ -213,7 +213,7 @@ class mi_workflow(object):
             for filename in result["result-info"]["result_files"]:
                 mime_type0 = result["result-info"]["result_files"][filename][1]
                 mime_type1 = result["result-info"]["result_files"][filename][2]
-                print("result file = %s(%s; %s)"%(filename, mime_type0, mime_type1))
+                print("result file = %s(%s; %s)"%(filename, mime_type0, mime_type1), flush=True)
                 if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
                     outfile = open(filename, "w")
                     outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode("utf-8"))
@@ -234,12 +234,12 @@ class mi_workflow(object):
 
         ret = self.session.get("%s/get-calcinfo"%self.base_url, headers=self.headers)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        print("status code:%d"%ret.status_code)
+        print("status code:%d"%ret.status_code, flush=True)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return None
         else:
             items = ret.json()
@@ -258,14 +258,14 @@ class mi_workflow(object):
 
         ret = self.session.post("%s/cancel-wait-calc"%self.base_url, headers=self.headers, json=data)
         if ret.status_code != 200 and ret.status_code != 201:
-            print("error ?:%s"%ret.text)
+            print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]), flush=True)
 
         code = ret.json()["code"]
         message = ret.json()["message"]
-        print("code = %s / message = %s"%(code, message))
+        print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
             return False, message
@@ -277,13 +277,13 @@ def main():
     開始点
     '''
 
-    print(len(sys.argv))
+    print(len(sys.argv), flush=True)
     if sys.version[0] != "3":
-        print("Please run under the python version 3.6 or later. now you are executing this under the python version %s"%sys.version[0])
+        print("Please run under the python version 3.6 or later. now you are executing this under the python version %s"%sys.version[0], flush=True)
         sys.exit(1)
 
     if len(sys.argv) < 7:
-        print("python %s <base url> <site id> <api token> <command> <infile(s)> <result file(s)> [parameter]")
+        print("python %s <base url> <site id> <api token> <command> <infile(s)> <result file(s)> [parameter]", flush=True)
         print("")
         print("Usage:")
         print("      site id     : one of 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco'")
@@ -292,7 +292,7 @@ def main():
         print("      command     : command name that execute in remote side(full path)")
         print("      infiles     : input file for the command(e.g. infile1:infile2:...:infilen")
         print("      result files: result file from the command and you need to.(e.g. result1:result2:...:resultn")
-        print("      paramere    : define extra parameters for the command")
+        print("      paramere    : define extra parameters for the command", flush=True)
         sys.exit(1)
 
     baseUrl = sys.argv[1]
@@ -305,48 +305,48 @@ def main():
     if len(sys.argv) == 8:
         params = sys.argv[7]
 
-    print("base url = %s"%baseUrl)
-    print("site id = %s"%siteId)
+    print("base url = %s"%baseUrl, flush=True)
+    print("site id = %s"%siteId, flush=True)
 
     api_prog = mi_workflow(siteId, baseUrl, token, command, infiles, result_files, params)
 
-    print("regist calc")
+    print("regist calc", flush=True)
     if api_prog.miDistApiAddCalc() is False:
-        print("error?")
+        print("error?", flush=True)
         sys.exit(1)
     time.sleep(2.0)
-    print("allow calc")
+    print("allow calc", flush=True)
     ret, message = api_prog.miDistApiAllowWaitCalc()
     if ret is False:
-        print(message)
+        print(message, flush=True)
         sys.exit(1)
 
-    print("wait untill end")
+    print("wait untill end", flush=True)
     time.sleep(2.0)
     priv_message = "unknown"
     while True:         # 計算終了になるまでループ
         ret, messages = api_prog.miDistApiStatus()
         if ret is False:
-            print(messages)
+            print(messages, flush=True)
             sys.exit(1)
 
         message = messages.split(":")[1]
         if priv_message != message:
-            print("status change from %s to %s"%(priv_message, message))
+            print("status change from %s to %s"%(priv_message, message), flush=True)
             priv_message = message
 
         if message == "got return":
             break
         time.sleep(5.0)
 
-    print("get results")
+    print("get results", flush=True)
     time.sleep(2.0)
     ret, message = api_prog.miDistApiGetCalcResult()
     if ret is False:
-        print(message)
+        print(message, flush=True)
         sys.exit(1)
 
-    print("calc end")
+    print("calc end", flush=True)
     api_prog.accept_id = None
     sys.exit(0)
 
