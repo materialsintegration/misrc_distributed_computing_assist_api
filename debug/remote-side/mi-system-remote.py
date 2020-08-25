@@ -182,7 +182,7 @@ class mi_remote(object):
         data['accept_id'] = self.accept_id
         data['site_id'] = self.site_id
         if self.command_result != 0:
-            data['result'] = "abnormal-end"
+            data['result'] = "abnormal"
         else:
             data['result'] = status
 
@@ -321,7 +321,7 @@ def main():
         print("python %s <site id> <base url> <token>")
         print("")
         print("Usage:")
-        print("      site id : one of 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco'")
+        print("      site id : one of 'nims-dev', 'rme-u-tokyo', 'uacj', 'ihi' and 'kobelco'")
         print("      base url: MI system top URL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
         print("        token : 64文字のMIntシステムのAPIへアクセスするためのトークン")
         print(len(sys.argv))
