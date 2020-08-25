@@ -386,7 +386,7 @@ def get_calc_result():
     if (accept_id in calc_informations) is False:
         log_print(1, "(/status) There is no information about the id(%s)"%accept_id)
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     infor = calc_informations[accept_id]
 
@@ -468,7 +468,7 @@ def calc_request():
     if accept_id is None:
         log_print(1, "(/calc-request) There is no information about the your site-id(%s)"%site_id)
         message = {"message":"There is no information about the your site id(%s)"%site_id, "code":401}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
@@ -511,7 +511,7 @@ def calc_params():
     else:
         log_print(1, "(/%s) There is no information which can calc(no calc wating), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc wating), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     log_print(1, "(/calc-params) return information")
     #message = {"message":"There is information that can calc", "code":200, "accept_id":accept_id}
@@ -551,7 +551,7 @@ def calc_params_complete():
     else:
         log_print(1, "(/%s) There is no information which can calc(no params sending), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no params sending), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     calc_informations[accept_id]["calc_status"] = "complete send"
     message = {"message":"ok", "code":200}
@@ -588,7 +588,7 @@ def calc_start():
     else:
         log_print(1, "(/%s) There is no information which can calc(no complete send), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no complete send), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     calc_informations[accept_id]["calc_status"] = "running"
     message = {"message":"ok", "code":200}
@@ -626,7 +626,7 @@ def calc_end():
     else:
         log_print(1, "(/%s) There is no information which can calc(no calc running), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc running), about the your site id(%s)"%site_id, "code":200}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     # bodyのresultキーの確認
     if ("result" in flask.request.get_json()) is False:
@@ -677,7 +677,7 @@ def send_results():
     else:
         log_print(1, "(/%s) There is no information which can recieve(no calc end), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can recieve(no calc end), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     # bodyのresult_filesキーの確認
     if ("result_files" in flask.request.get_json()) is False:
@@ -724,7 +724,7 @@ def end_send():
     else:
         log_print(1, "(/%s) There is no information which can recieve end(no calc end or recieving), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can recieve end(no calc end or recieving), about the your site id(%s)"%site_id, "code":400}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     # bodyのresultキーの確認
     if ("result" in flask.request.get_json()) is False:
