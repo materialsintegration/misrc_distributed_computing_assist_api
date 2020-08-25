@@ -755,12 +755,12 @@ if __name__ == "__main__":
     param_len = len(sys.argv)
     #print("paramlen = %d / params = %s"%(param_len, sys.argv))
 
-    ip_address = "127.0.0.1"
+    ipaddress = "127.0.0.1"
     port_num = "50000"
     #if param_len == 3:
-    #    ip_address = sys.argv[1]
+    #    ipaddress = sys.argv[1]
     #    port_num = sys.argv[2]
-    #    print("%s: set listen ip_address to %s"%(datetime.datetime.now(), ip_address))
+    #    print("%s: set listen ipaddress to %s"%(datetime.datetime.now(), ipaddress))
     #    print("%s: set listen port number to %s"%(datetime.datetime.now(), port_num))
     #else:
     #    print("%s: not define listen ip or port. exit"%datetime.datetime.now())
@@ -797,4 +797,4 @@ if __name__ == "__main__":
     print("      %s / %s"%(ipaddress, port_num))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.debug = True
-    app.run(host=ip_address, port=port_num)
+    app.run(host=ipaddress, port=port_num)
