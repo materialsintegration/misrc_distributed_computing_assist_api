@@ -280,25 +280,34 @@ class mi_remote(object):
         print("計算情報を取得します。")
         if self.apiCalcParams() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
             return
         time.sleep(10)
         print("計算情報が取得できました。")
         if self.apiCalcParamsComplete() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
             return
         time.sleep(10)
         print("計算を開始します。")
         if self.apiCalcStart() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
             return
         print("計算終了。計算終了を通知します")
         if self.apiCalcEnd() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
+            return
+        if self.command_result != 0:            # 異常終了時
+            print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
             return
         time.sleep(10)
         print("結果をアップロードします。")
         if self.apiSendResult() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
+            self.accept_id = None
             return
         time.sleep(10)
         print("アップロード終了")
