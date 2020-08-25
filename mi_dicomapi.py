@@ -363,7 +363,7 @@ def calc_status():
     if (accept_id in calc_informations) is False:
         log_print(1, "(/status) There is no information about the id(%s)"%accept_id)
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     log_print(1, "(/status) status:%s"%calc_informations[accept_id]["calc_status"])
     status = {"message":"status:%s"%calc_informations[accept_id]["calc_status"], "code":200}
