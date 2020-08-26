@@ -163,9 +163,10 @@ class mi_remote(object):
         p.wait()
         stdout_data = p.stdout.read()
         print(stdout_data)
-        result = stdout_data.decode("utf-8").split("\n")[0]
+        #result = stdout_data.decode("utf-8").split("\n")[0]
+        result = p.returncode
         print("実行結果（%s）"%result)
-        if result != "0":
+        if result != 0:
             print("コマンド異常終了？")
             self.command_result = 1
         else:
