@@ -289,16 +289,16 @@ def main():
         print("python %s <base url> <site id> <api token> <command> <infile(s)> <result file(s)> [parameter]", flush=True)
         print("")
         print("Usage:")
-        print("      site id     : one of 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco'")
-        print("      base url    : MI system top URL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
-        print("      api token   : valid token for api access.")
-        print("      command     : command name that execute in remote side(full path)")
-        print("      infiles     : input file for the command(e.g. infile1:infile2:...:infilen")
-        print("      result files: result file from the command and you need to.(e.g. result1:result2:...:resultn")
-        print("      paramere    : define extra parameters for the command", flush=True)
+        print("      site id     : 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco' の様な識別名")
+        print("      base url    : MIntシステムのURL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
+        print("      api token   : ワークフロー実行者のAPIトークン")
+        print("      command     : 外部計算機側で実行するコマンドまたはプログラム名")
+        print("      infiles     : commandに必要なパラメータを : でつなげて記述(e.g. infile1:infile2:...:infilen")
+        print("      result files: 外部計算機側で出力されたファイルのうち必要なファイルを : でつなげて記述(e.g. result1:result2:...:resultn")
+        print('      paramere    : commandに必要なファイル以外のパラメータ。複数ある場合は"で囲って指定する。', flush=True)
         sys.exit(1)
 
-    baseUrl = sys.argv[1]
+    baseUrl = "%s:50443"%sys.argv[1]
     siteId = sys.argv[2]
     token = sys.argv[3]
     command = sys.argv[4]

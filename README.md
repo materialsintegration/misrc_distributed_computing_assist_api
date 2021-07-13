@@ -226,6 +226,24 @@ APIとして機能する。デーモンとして動作させる。用意する�
 分散環境資源計算機側で実行させるプログラムは、以下のように準備しておく。
 * MIntシステム側のAPIプログラム内に分散環境資源名とともにスクリプト名を設定しておく。
 * 分散環境資源計算機内に該当するソルバー実行用のスクリプトをインストールしておく。
+* 使い方
+  + 予測モジュールのobjectPathで統括スクリプトを指定
+  + 統括スクリプト内でパラメータと共に実行する
+  + Usage
+    ```
+    $ python3.6 mi-system-wf.py 
+    1
+    python %s <base url> <site id> <api token> <command> <infile(s)> <result file(s)> [parameter]
+    
+    Usage:
+          site id     : 'nims-dev', 'u-tokyo-enokiLab', 'uacj', 'ihi' and 'kobelco' の様な識別名
+          base url    : MIntシステムのURL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)
+          api token   : ワークフロー実行者のAPIトークン
+          command     : 外部計算機側で実行するコマンドまたはプログラム名
+          infiles     : commandに必要なパラメータを : でつなげて記述(e.g. infile1:infile2:...:infilen
+          result files: 外部計算機側で出力されたファイルのうち必要なファイルを : でつなげて記述(e.g. result1:result2:...:resultn
+          paramere    : commandに必要なファイル以外のパラメータ。複数ある場合は"で囲って指定する。
+    ```
 
 ### 分散環境資源計算機側
 分散環境資源計算機側はポーリングプログラム（mi-system-remote.py）をデーモンとして動作させる。あらかじめ実行可能なソルバーを決めておき、それを実行するスクリプトをインストールしておく。
