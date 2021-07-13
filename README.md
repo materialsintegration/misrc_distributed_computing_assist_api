@@ -230,6 +230,19 @@ APIとして機能する。デーモンとして動作させる。用意する�
 ### 分散環境資源計算機側
 分散環境資源計算機側はポーリングプログラム（mi-system-remote.py）をデーモンとして動作させる。あらかじめ実行可能なソルバーを決めておき、それを実行するスクリプトをインストールしておく。
 
+* 使い方
+  ```
+  python3.6 mi-system-remote.py <識別名> <APIサーバーホスト名> <token>
+  ```
+* テスト実行の例
+  ```
+  $ python3.6 mi-system-remote.py nims-dev https://nims.mintsys.jp <token>
+  site id = nims-dev
+  base url = https://nims.mintsys.jp:50443
+   token = <token>の表示
+  2021/07/13 13:02:21:send request https://nims.mintsys.jp:50443/mi-distcomp-api/calc-request?site_id=nims-dev
+  code = 401 / message = There is no information about the your site id(nims-dev)
+  ```
 ### 
 ## 参考文献
 ### FlaskのAPI利用法
