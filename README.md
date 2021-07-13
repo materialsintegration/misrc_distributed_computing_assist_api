@@ -1,9 +1,12 @@
-# MIシステム用に分散計算機環境用の補助を行うAPI群
+# 外部計算機資源の有効活用（API版）
 このリポジトリには表題のAPIを実現するpythonベース、Flaskパッケージ使用のプロジェクトが格納されています。
 ## 概要
 MIシステムはローカルに構築された計算機のみを使用して計算を行います。行われる計算のうち商用コードなどがあった場合も同様に実行はローカルにまたはライセンスの許諾する場所の計算機を使用する。他方、共同研究利用などで企業などからNIMSへアクセスし、NIMSにない計算機または商用コードを含んだ計算を行いたいというニーズがある。このためMIシステムの計算機からこれら外部の計算機または商用コードの計算を行う計算機を有機的に接続し、あたかもMIシステムで計算するのと同じ状態を作り出すための仕組みを考える。その一つが本プロジェクトであり、APIを中心にポーリングシステムを構築して非同期ながらHTTPまたはHTTPSアクセスのみでこれら分散計算機環境に対応したMIシステムとすることができる。
 
 ※ 分散環境で実行される商用コードはあくまでその分散環境と実行者の組織、場所などが同じまたはその商用コードのライセンス上許諾される範囲にあることが前提となる。ただし本プロジェクトはその前提条件を検証、担保するところは範囲外とする。
+
+当リポジトリは外部計算機資源の有効活用に置ける、API実行のための資材のみが格納されている。
+インストーラ、設計書などの根本的な情報はすべて「https://gitlab.mintsys.jp/midev/misrc_remote_workflow」リポジトリにて管理する方向である。
 
 ## 使用準備
 ここから使用前の準備を記述する。
@@ -40,10 +43,9 @@ MIシステムはローカルに構築された計算機のみを使用して計
     ProxyPass /mi-distcomp-api http://192.168.1.143/mi-distcomp-api
     ProxyPassReverse /mi-distcomp-api http://192.168.1.143/mi-distcomp-api
     ```
-    の２行を、```<VirtualHost *:443>```ディレクティブの  
+    の２行を、```<VirtualHost *:50443>```ディレクティブの  
     ```
-    ProxyPass / http://192.168.1.144/
-    ProxyPassReverse / http://192.168.1.144/
+    ProxyPass / http://192.168.1.143/
     ```
     の直前に追記します。
   + 再起動
@@ -105,13 +107,21 @@ MIシステムはローカルに構築された計算機のみを使用して計
     ├── rsyslog.conf.old  
     └── rsyslog.patch  
 
+### リポジトリ内の説明
+
 * README.md：このファイル
 * logging.cfg：syslog追加設定ファイル
 * mi_dicomapi.py：MIシステム側で動作するポーリングシステムAPI本体。
 * mi_dicomapi_informations.py：APIが管理する情報クラス
 * debugディレクトリ：ワークフロー側、分散環境資源計算機側のプログラム、デバッグ用状態表示プログラム、テスト実行用のパラメータなどがある。
+* debug/api_status.py : API 内部の計算情報の状態監視用プログラム。
+* debug/api_status_gui.py : 同、GUI部品
 * debug/mi-system-side：ワークフロー側プログラム。デバッグ用のパラメータファイル。
+* debug/mi-system-side/api-debug.py : 予測モジュール動作をシミュレートするプログラム。計算情報はダミー。要wxPython。
+* debug/mi-system-side/debug_gui.py : 同、GUI部品
 * debug/remote-side：分散環境資源計算機側ポーリングシステムプログラム、デバッグ用状態表示プログラム。
+* debug/remote-side/api-debug.py : 外部計算機資源側の動作をシミュレートするプログラム。計算情報はダミー。要wxPython。
+* debug/remote-side/debug-gui.py : 同、GUI部品
 * syslog：/etc/rsyslog.confの設定用差分ファイル。
 
 ## 使い方

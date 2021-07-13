@@ -5,6 +5,7 @@
 MIシステム用に分散型計算環境を補助するAPI群へ登録を行うデバッグプログラム
 '''
 
+import sys, os
 import requests
 import json
 import base64
@@ -17,14 +18,15 @@ class api_debug(MIDistCompAPIDebugGUI):
     APIデバッグ、GUI版
     '''
 
-    def __init__(self, parent):
+    def __init__(self, parent, baseUrl, token):
         '''
         初期化
         '''
 
         MIDistCompAPIDebugGUI.__init__(self, parent)
 
-        self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        #self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        self.headers={'Authorization': 'Bearer %s'%token, 'Content-Type': 'application/json'}
         self.data = {
             'calc-info':{
                 'command': '/opt/mi-remote/abaqus.sh',
@@ -46,7 +48,9 @@ class api_debug(MIDistCompAPIDebugGUI):
         }
         self.session = requests.Session()
 
-        self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
+        #self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
+        self.base_url = baseUrl
+        self.token = token
 
     def result_out(self, ret):
         '''
@@ -234,12 +238,23 @@ def main():
     開始点
     '''
 
+    if len(sys.argv) < 3:
+        print("python %s <base url> <api token>")
+        print("")
+        print("Usage:")
+        print("      base url    : MI system top URL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
+        print("      api token   : valid token for api access.")
+        print(len(sys.argv))
+        sys.exit(1)
+
+    baseUrl = sys.argv[1]
+    token = sys.argv[2]
+
     app = wx.App(False)
-    org = api_debug(None)
+    org = api_debug(None, baseUrl, token)
     org.Show()
 
     app.MainLoop()
 
 if __name__ == '__main__':
     main()
-                               

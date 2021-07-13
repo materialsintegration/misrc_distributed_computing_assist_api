@@ -1,0 +1,16 @@
+# Systemd unit file for docroot web-application instances.
+# 
+
+[Unit]
+Description=arbitration using python3 Web Application Container
+After=syslog.target network.target
+
+[Service]
+Type=forking
+ExecStart=/var/lib/misrc_distributed_computing_assist_api/start.sh http://192.168.1.143 192.168.1.143 50000
+ExecStop=/var/lib/misrc_distributed_computing_assist_api/shutdown.sh
+
+[Install]
+WantedBy=multi-user.target
+
+

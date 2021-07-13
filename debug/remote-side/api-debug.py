@@ -5,6 +5,7 @@
 MIシステム用に分散型計算環境を補助するAPI群へ登録を行うデバッグプログラム
 '''
 
+import sys, os
 import requests
 import json
 import base64
@@ -16,25 +17,28 @@ class api_debug(MIDistCompAPIDebugGUIForRemote):
     APIデバッグ、GUI版
     '''
 
-    def __init__(self, parent):
+    def __init__(self, parent, baseUrl, token, siteId, command_name):
         '''
         初期化
         '''
 
         MIDistCompAPIDebugGUIForRemote.__init__(self, parent)
 
-        self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        #self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
+        self.headers={'Authorization': 'Bearer %s'%token, 'Content-Type': 'application/json'}
         self.data = {'calc-info': {
-            'command': '/opt/mi-remote/abaqus.sh',
-            'remote-site': 'nims-dev',
+            'command': command_name,
+            'remote-site': siteId,
             'parameters':'',
             'parameter_files':{
                 'XX.inp':'xxx',
                 'XX.dat':'yyy'}}}
         self.session = requests.Session()
 
-        self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
-        self.site_id = "nims-dev"
+        #self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
+        #self.site_id = "nims-dev"
+        self.base_url = baseUrl
+        self.site_id = siteId
         self.accept_id = None
 
     def result_out(self, ret):
@@ -191,8 +195,24 @@ def main():
     開始点
     '''
 
+    if len(sys.argv) < 5:
+        print("python %s <base url> <api token> <site id> <command name>")
+        print("")
+        print("Usage:")
+        print("      base url    : MI system top URL(e.g. https://nims.mintsys.jp or https://dev-u-tokyo.mintsys.jp)")
+        print("      api token   : valid token for api access.")
+        print("      site id     : valid site id which given to your site(e.g. u-tokyo/nims-dev/ihi)")
+        print("      command name: valid command name(e.g. /home/misystem/execute_remote_command.sh)")
+        print(len(sys.argv))
+        sys.exit(1)
+
+    baseUrl = sys.argv[1]
+    token = sys.argv[2]
+    siteId = sys.argv[3]
+    commandName = sys.argv[4]
+
     app = wx.App(False)
-    org = api_debug(None)
+    org = api_debug(None, baseUrl, token, siteId, commandName)
     org.Show()
 
     app.MainLoop()
