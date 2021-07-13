@@ -338,9 +338,9 @@ def main():
         sys.exit(1)
 
     print("site id = %s"%sys.argv[1])
-    print("base url = %s"%sys.argv[2])
+    print("base url = %s:50443"%sys.argv[2])
     print(" token = %s"%sys.argv[3])
-    api_prog = mi_remote(sys.argv[1], sys.argv[2], sys.argv[3])
+    api_prog = mi_remote(sys.argv[1], "%s:50443"%sys.argv[2], sys.argv[3])
 
     api_prog.request_status = None
     while True:
