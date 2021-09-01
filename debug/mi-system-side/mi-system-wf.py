@@ -216,7 +216,7 @@ class mi_workflow(object):
                 filesize = len(result["result-info"]["result_files"][filename][0])
                 mime_type0 = result["result-info"]["result_files"][filename][1]
                 mime_type1 = result["result-info"]["result_files"][filename][2]
-                print("result file = %s(size=%d / mime_type0(%s); mime_type1(%s))"%(filename, mime_type0, mime_type1), flush=True)
+                print("result file = %s(size=%d / mime_type0(%s); mime_type1(%s))"%(filename, filesize, mime_type0, mime_type1), flush=True)
                 if mime_type1 == "charset=utf-8;" or mime_type1 == "charset=us-ascii;":
                     outfile = open(filename, "w")
                     outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode("utf-8"))
