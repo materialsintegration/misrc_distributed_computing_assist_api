@@ -463,7 +463,7 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
     if is_site_id is False:
         log_print(1, "(/%s) Your site-id(%s) does not match in the list that acceptable to."%(url_id, site_id))
         message = {"message":"Your site-id(%s) does not match in the list that acceptable to."%site_id, "code":400}
-        return(make_api_response(message))
+        return False, message
 
 
     # accept_idの確認
