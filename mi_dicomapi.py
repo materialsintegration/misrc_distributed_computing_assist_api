@@ -453,6 +453,19 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
     遠隔側の要求確認（accept id)
     '''
 
+    # site_idの確認
+    is_site_id = False
+    for item in calc_informations:
+        if calc_informations[item]["calc-info"]["remote-site"] == site_id:
+            is_site_id = True
+
+    # 識別子未登録
+    if is_site_id is False:
+        log_print(1, "(/%s) Your site-id(%s) does not match in the list that acceptable to."%(url_id, site_id))
+        message = {"message":"Your site-id(%s) does not match in the list that acceptable to."%site_id, "code":400}
+        return(make_api_response(message))
+
+
     # accept_idの確認
     if (accept_id in calc_informations) is False:
         log_print(1, "(/%s) There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
@@ -501,14 +514,16 @@ def calc_request():
                 accept_id = item
                 break;                              # 最初の一つ目を返す
 
+    # site_id/accept_idのチェック 
+    ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
+    if ret is False:
+        return(make_api_response(message, status_code=400))
+
+    # 計算未登録
     if accept_id is None:
         log_print(1, "(/calc-request) There is no information about the your site-id(%s)"%site_id)
         message = {"message":"There is no information about the your site id(%s)"%site_id, "code":401}
         return(make_api_response(message))
-
-    ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
-    if ret is False:
-        return(make_api_response(message, status_code=400))
 
 
     infor = {}
