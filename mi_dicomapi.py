@@ -27,12 +27,14 @@ if sys.version_info[0] <= 2:
 else:
     import configparser
     #from urllib.parse import urlparse
+import threading
 
 logging.config.fileConfig("./logging.cfg")
 logger = logging.getLogger("__name__")
 
 app = flask.Flask(__name__)
  
+lock = threading.Lock()          # セマフォ
 calc_informations = {}           # CalcInfomationを格納する
 #remote_site_ids = ["nims-dev", "u-tokyo-enokiLab", "uacj", "ihi", "kobelco"]
 remote_site_ids = []
@@ -169,6 +171,31 @@ def make_api_response(response_text, token="", status_code=200):
 
     return response
 
+#---------------------------------------
+def get_valid_commands():
+    '''
+    登録済みのコマンドであるかどうかの情報読み込み
+    '''
+
+    valid_commands = {}
+
+    # iniファイルの読み込み
+    parser = configparser.ConfigParser()
+    inifilename = "./mi_distributed_computing_assist.ini"
+    if os.path.exists(inifilename) is True:
+        parser.read(inifilename)
+    # 許可サイトの読み込み
+    if parser.has_section("RemoteSites") is True:
+        remote_site_ids = parser.get("RemoteSites", "remote_site_ids").split()
+    print("remote servers")
+    for server in remote_site_ids:
+        print("  %s"%server)
+        if parser.has_section(server) is True:
+            valid_commands[server] = []
+            commands = parser.get(server, "commands").split()
+            for command in commands:
+                valid_commands[server].append(command)
+
 #==================== デバッグ用 ===========================
 @app.route("/%s/get-calcinfo"%BASE_URL)
 def get_calcinfo():
@@ -214,6 +241,11 @@ def add_calcinfo():
         log_print(1, "(/add-calcinfo)no remote-site id")
         return(make_api_response(message, status_code=400))
 
+    # チェック中はvalid_commandsの作り直し禁止
+    lock.acquire()
+    # 最新の適正コマンドリストの読み込み
+    get_valid_commands()
+
     # コマンドの確認
     command_name = None
     if ("command" in calc_info) is True:
@@ -224,12 +256,16 @@ def add_calcinfo():
             message = {"message":"invalid command name(%s)"%calc_info["command"], "code":401}
             log_print(1, "(/add-calcinfo)invalid command entry(%s)"%calc_info["command"])
             #return flask.make_response(flask.jsonify(response), 401)
+            lock.release()
             return(make_api_response(message, status_code=400))
     else:
         message = {"message":"no command entry", "code":400}
         log_print(1, "(/add-calcinfo)no command entry")
         #return flask.make_response(flask.jsonify(response),400)
+        lock.release()
         return(make_api_response(message, status_code=400))
+
+    lock.release()
 
     # パラメータとファイルの確認
     # ToDO:
@@ -735,9 +771,9 @@ def end_send():
     result = flask.request.get_json()['result']
 
     if result != "end send":
-        log_print(1, "(/%s) unknown string in end-send body"%(result, url_id))
-        message = {"message":"unknown string(%s) in end-send body"%(result, url_id)}
-        return(make_spi_response(message, status_code=400))
+        log_print(1, "(/%s) unknown string in end-send body"%url_id)
+        message = {"message":"unknown string(%s) in end-send body"%result}
+        return(make_api_response(message, status_code=400))
 
     calc_informations[accept_id]["calc_status"] = "got return"
     message = {"message":"ok", "code":200}
@@ -771,21 +807,22 @@ if __name__ == "__main__":
     inifilename = "./mi_distributed_computing_assist.ini"
     if os.path.exists(inifilename) is True:
         parser.read(inifilename)
-    # 許可サイトの読み込み
-    if parser.has_section("RemoteSites") is True:
-        remote_site_ids = parser.get("RemoteSites", "remote_site_ids").split()
-    print("remote servers")
-    for server in remote_site_ids:
-        print("  %s"%server)
-        if parser.has_section(server) is True:
-            valid_commands[server] = []
-            commands = parser.get(server, "commands").split()
-            for command in commands:
-                valid_commands[server].append(command)
-
-    print("%15s : commands"%"server")
-    for item in valid_commands:
-        print("%15s : %s"%(item, valid_commands[item]))
+#    # 許可サイトの読み込み
+    get_valid_commands()                           # 初回読み込み
+#    if parser.has_section("RemoteSites") is True:
+#        remote_site_ids = parser.get("RemoteSites", "remote_site_ids").split()
+#    print("remote servers")
+#    for server in remote_site_ids:
+#        print("  %s"%server)
+#        if parser.has_section(server) is True:
+#            valid_commands[server] = []
+#            commands = parser.get(server, "commands").split()
+#            for command in commands:
+#                valid_commands[server].append(command)
+#
+#    print("%15s : commands"%"server")
+#    for item in valid_commands:
+#        print("%15s : %s"%(item, valid_commands[item]))
     # 待ち受けアドレスとポート番号
     if parser.has_section("Server") is True:
         if parser.has_option("Server", "ipaddress") is True:
