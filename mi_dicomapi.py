@@ -18,8 +18,7 @@ import sys, os
 import datetime
 import uuid
 from mi_dicomapi_infomations import *
-import logging
-from logging import config
+import logging.config
 import socket
 if sys.version_info[0] <= 2:
     import ConfigParser
