@@ -28,7 +28,7 @@ else:
     #from urllib.parse import urlparse
 import threading
 
-logging.config.fileConfig("./logging.cfg")
+logging.config.fileConfig("./logging.conf")
 #logger = logging.getLogger("__name__")
 logfile = logging.getLogger("apis")             # 通常のログファイル
 execlogfile = logging.getLogger("exec")         # 実行情報ログファイル
