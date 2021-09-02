@@ -465,7 +465,6 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
         message = {"message":"Your site-id(%s) does not match in the list that acceptable to."%site_id, "code":400}
         return False, message
 
-
     # accept_idの確認
     if (accept_id in calc_informations) is False:
         log_print(1, "(/%s) There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
@@ -517,7 +516,7 @@ def calc_request():
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message))
 
     # 計算未登録
     if accept_id is None:
