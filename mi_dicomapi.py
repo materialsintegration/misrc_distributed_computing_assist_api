@@ -30,7 +30,9 @@ else:
 import threading
 
 logging.config.fileConfig("./logging.cfg")
-logger = logging.getLogger("__name__")
+#logger = logging.getLogger("__name__")
+logfile = logging.getLogger("apis")             # 通常のログファイル
+execlogfile = logging.getLogger("exec")         # 実行情報ログファイル
 
 app = flask.Flask(__name__)
  
@@ -91,18 +93,20 @@ def log_print(loglevel, message):
     try:
         loglevel = int(loglevel)
     except:
-        loglevel = 0
+        loglevel = 4
 
     if loglevel == 0:           # critical
-        logger.critical(message)
+        logfile.critical(message)
     elif loglevel == 1:         # error
-        logger.error(message)
+        logfile.error(message)
     elif loglevel == 2:         # warning
-        logger.warning(message)
+        logfile.warning(message)
     elif loglevel == 3:         # info
-        logger.info(message)
+        logfile.info(message)
     elif loglevel == 4:         # debug
-        logger.debug(message)
+        logfile.debug(message)
+
+    logfile.handlers[0].flush()
 
 #---------------------------------------
 def check_accept_id_in_requestbody(api_url):
