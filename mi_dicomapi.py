@@ -519,7 +519,7 @@ def calc_request():
                 accept_id = item
                 break;                              # 最初の一つ目を返す
 
-    print(str(list(flask.request.get_json())))
+    print(flask.request.remote_addr)
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
