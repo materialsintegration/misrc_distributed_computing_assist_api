@@ -83,7 +83,8 @@ def delete_calc_information(accept_id):
     del calc_informations[accept_id]
     
 #---------------------------------------
-def log_print(loglevel, message):
+#def log_print(loglevel, from_url, mes):
+def log_print(loglevel, mes):
     '''
     ログ出力
     '''
@@ -94,6 +95,8 @@ def log_print(loglevel, message):
     except:
         loglevel = 4
 
+    from_url = "192.168.1.1"
+    message = "%s - - [%s] %s"%(from_url, datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), mes)
     if loglevel == 0:           # critical
         logfile.critical(message)
     elif loglevel == 1:         # error
@@ -516,6 +519,7 @@ def calc_request():
                 accept_id = item
                 break;                              # 最初の一つ目を返す
 
+    print(str(flask.request.get_json()))
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
