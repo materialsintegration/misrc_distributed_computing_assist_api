@@ -149,7 +149,6 @@ class mi_remote(object):
                     outfile = open(filename, "w")
                 except:
                     print("ファイル生成に失敗しました(ファイル名：%s）"%filename)
-                    self.accept_id = None
                     return False
 
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0]).decode("utf-8"))
@@ -159,7 +158,6 @@ class mi_remote(object):
                     outfile = open(filename, "bw")
                 except:
                     print("ファイル生成に失敗しました(ファイル名：%s）"%filename)
-                    self.accept_id = None
                     return False
 
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0].encode()))
@@ -305,8 +303,8 @@ class mi_remote(object):
         print("計算を開始します。")
         if self.apiCalcStart() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
-            self.accept_id = None
             self.apiEndSend()
+            self.accept_id = None
             return
         print("計算終了。計算終了を通知します")
         if self.apiCalcEnd() is False:
