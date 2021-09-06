@@ -306,6 +306,7 @@ class mi_remote(object):
         if self.apiCalcStart() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
             self.accept_id = None
+            self.apiEndSend()
             return
         print("計算終了。計算終了を通知します")
         if self.apiCalcEnd() is False:
