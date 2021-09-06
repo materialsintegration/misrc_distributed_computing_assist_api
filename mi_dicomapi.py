@@ -463,7 +463,7 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
 
     # site_idの確認
     is_site_id = False
-    if (item in remote_site_ids) is True:
+    if (site_id in remote_site_ids) is True:
         is_site_id = True
 
     # 識別子未登録
