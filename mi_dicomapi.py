@@ -463,9 +463,8 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
 
     # site_idの確認
     is_site_id = False
-    for item in calc_informations:
-        if calc_informations[item]["calc-info"]["remote-site"] == site_id:
-            is_site_id = True
+    if (item in remote_site_ids) is True:
+        is_site_id = True
 
     # 識別子未登録
     if is_site_id is False:
