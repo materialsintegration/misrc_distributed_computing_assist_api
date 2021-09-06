@@ -185,6 +185,8 @@ def get_valid_commands():
     登録済みのコマンドであるかどうかの情報読み込み
     '''
 
+    global remote_site_ids
+
     valid_commands = {}
 
     # iniファイルの読み込み
@@ -223,6 +225,8 @@ def add_calcinfo():
     '''
     計算の登録
     '''
+
+    global remote_site_ids
 
     # JSONから取り出し。
     #token = flask.request.headers.get("Authorization")
@@ -460,6 +464,8 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
     '''
     遠隔側の要求確認（accept id)
     '''
+
+    global remote_site_ids
 
     # site_idの確認
     is_site_id = (site_id in remote_site_ids)
