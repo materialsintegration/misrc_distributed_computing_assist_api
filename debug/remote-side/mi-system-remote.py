@@ -145,11 +145,23 @@ class mi_remote(object):
             mime_type0 = self.calc_info["calc-info"]["parameter_files"][filename][1]
             mime_type1 = self.calc_info["calc-info"]["parameter_files"][filename][2]
             if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
-                outfile = open(filename, "w")
+                try:
+                    outfile = open(filename, "w")
+                except:
+                    print("ファイル生成に失敗しました(ファイル名：%s）"%filename)
+                    self.accept_id = None
+                    return False
+
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0]).decode("utf-8"))
                 outfile.close()
             else:
-                outfile = open(filename, "bw")
+                try:
+                    outfile = open(filename, "bw")
+                except:
+                    print("ファイル生成に失敗しました(ファイル名：%s）"%filename)
+                    self.accept_id = None
+                    return False
+
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0].encode()))
                 outfile.close()
 
