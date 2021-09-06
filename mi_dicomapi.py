@@ -186,6 +186,7 @@ def get_valid_commands():
     '''
 
     global remote_site_ids
+    global valid_commands
 
     valid_commands = {}
 
@@ -227,6 +228,7 @@ def add_calcinfo():
     '''
 
     global remote_site_ids
+    global valid_commands
 
     # JSONから取り出し。
     #token = flask.request.headers.get("Authorization")
