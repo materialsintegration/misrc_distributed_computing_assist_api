@@ -162,12 +162,15 @@ class mi_remote(object):
         # 計算ディレクトリの変更
         os.mkdir("/tmp/%s"%self.accept_id)
         os.chdir("/tmp/%s"%self.accept_id)
+
         # ファイルの取り出し
         for filename in self.calc_info["calc-info"]["parameter_files"]:
-            self.check_directory_in_filename(filename)
+            #self.check_directory_in_filename(filename)
+            filename = filename.split("/")[-1]              # ディレクトリ名を取り払ったファイル名のみ取り出し
             mime_type0 = self.calc_info["calc-info"]["parameter_files"][filename][1]
             mime_type1 = self.calc_info["calc-info"]["parameter_files"][filename][2]
             if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
+                print("ファイル名(%s) をアスキーファイルとして取り出し、保存しました")
                 try:
                     outfile = open(filename, "w")
                 except:
@@ -177,6 +180,7 @@ class mi_remote(object):
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0]).decode("utf-8"))
                 outfile.close()
             else:
+                print("ファイル名(%s) をバイナリファイルとして取り出し、保存しました")
                 try:
                     outfile = open(filename, "bw")
                 except:
@@ -195,7 +199,18 @@ class mi_remote(object):
         p = subprocess.Popen(command_name, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.wait()
         stdout_data = p.stdout.read()
-        print(stdout_data)
+        stderr_data = p.stderr.read()
+
+        # 標準出力
+        outfile = open("calc_stdout.txt", "w")
+        outfile.write(stdout_data.decode("utf-8").split("\n"))
+        outfile.close()
+        # 標準エラー
+        outfile = open("calc_stderr.txt", "w")
+        outfile.write(stderr_data.decode("utf-8").split("\n"))
+        outfile.close()
+
+        #print(stdout_data)
         #result = stdout_data.decode("utf-8").split("\n")[0]
         result = p.returncode
         print("実行結果（%s）"%result)

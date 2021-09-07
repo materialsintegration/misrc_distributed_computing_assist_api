@@ -40,6 +40,10 @@ class mi_workflow(object):
         for item in result_files:
             self.data['calc-info']['result_files'][item] = ['','','']
 
+        # 標準出力と標準エラーの戻り用のエントリをセットする
+        self.data['calc-info']['result_files']["calc_stdout.txt"] = ['','','']
+        self.data['calc-info']['result_files']["calc_stderr.txt"] = ['','','']
+
         self.session = requests.Session()
 
         #self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
