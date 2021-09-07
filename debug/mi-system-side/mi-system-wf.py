@@ -83,7 +83,7 @@ class mi_workflow(object):
         '''
 
         for filename in self.data["calc-info"]["parameter_files"]:
-            p = subprocess.Popen("file -i -b %s"%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            p = subprocess.Popen('file -i -b "%s"'%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             p.wait()
             stdout_data = p.stdout.read()
             result = stdout_data.decode('utf-8').split("\n")[0]

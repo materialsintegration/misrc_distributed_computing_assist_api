@@ -57,6 +57,7 @@ class api_debug(MIDistCompAPIDebugGUIForRemote):
         calc-request APIの実行
         '''
 
+        print("%s/calc-request?site_id=%s"%(self.base_url, self.site_id))
         ret = self.session.get("%s/calc-request?site_id=%s"%(self.base_url, self.site_id), headers=self.headers, json=self.data)
 
         self.result_out(ret)
@@ -206,7 +207,7 @@ def main():
         print(len(sys.argv))
         sys.exit(1)
 
-    baseUrl = sys.argv[1]
+    baseUrl = "%s:50443/mi-distcomp-api"%sys.argv[1]
     token = sys.argv[2]
     siteId = sys.argv[3]
     commandName = sys.argv[4]

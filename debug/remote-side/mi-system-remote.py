@@ -34,6 +34,25 @@ class mi_remote(object):
         self.command_result = None
         self.calc_info = None
 
+
+    def check_directory_in_filename(filename):
+        '''
+        ファイル名に含まれるディレクトリの確認。なければ作る。
+        '''
+
+        items = filename.split("/")
+        if len(items) == 1:             # ディレクトリ指定は無と判断
+            return
+
+        current = os.getcwd()
+        for item in items:
+
+            if os.path.exists(item) is False:
+                os.mkdir(item)
+                cd item
+
+        os.chdir(current)
+
     def result_out(self, ret):
         '''
         レスポンスの表示
@@ -142,6 +161,7 @@ class mi_remote(object):
         os.chdir("/tmp/%s"%self.accept_id)
         # ファイルの取り出し
         for filename in self.calc_info["calc-info"]["parameter_files"]:
+            self.check_directory_in_filename(filename)
             mime_type0 = self.calc_info["calc-info"]["parameter_files"][filename][1]
             mime_type1 = self.calc_info["calc-info"]["parameter_files"][filename][2]
             if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
