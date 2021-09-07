@@ -170,7 +170,7 @@ class mi_remote(object):
             mime_type0 = self.calc_info["calc-info"]["parameter_files"][filename][1]
             mime_type1 = self.calc_info["calc-info"]["parameter_files"][filename][2]
             if mime_type1 == "charset=utf-8" or mime_type1 == "charset=us-ascii":
-                print("ファイル名(%s) をアスキーファイルとして取り出し、保存しました")
+                print("ファイル名(%s) をアスキーファイルとして取り出し、保存しました"%filename)
                 try:
                     outfile = open(filename, "w")
                 except:
@@ -180,7 +180,7 @@ class mi_remote(object):
                 outfile.write(base64.b64decode(self.calc_info["calc-info"]["parameter_files"][filename][0]).decode("utf-8"))
                 outfile.close()
             else:
-                print("ファイル名(%s) をバイナリファイルとして取り出し、保存しました")
+                print("ファイル名(%s) をバイナリファイルとして取り出し、保存しました"%filename)
                 try:
                     outfile = open(filename, "bw")
                 except:
