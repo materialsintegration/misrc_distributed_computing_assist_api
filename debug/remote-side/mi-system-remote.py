@@ -35,9 +35,11 @@ class mi_remote(object):
         self.calc_info = None
 
 
-    def check_directory_in_filename(filename):
+    def check_directory_in_filename(self, filename):
         '''
         ファイル名に含まれるディレクトリの確認。なければ作る。
+        @param filename(string)
+        @retval なし
         '''
 
         items = filename.split("/")
