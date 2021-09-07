@@ -265,22 +265,28 @@ class mi_remote(object):
         # 返すべきファイルの取得
         for filename in self.calc_info["calc-info"]["result_files"]:
             # ファイルの種類を特定
-            p = subprocess.Popen("file -b -i %s"%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            p.wait()
-            stdout_data = p.stdout.read()
-            print("filename(%s) is %s"%(filename, stdout_data))
-            result = stdout_data.decode("utf-8").split("\n")[0]
-            results = result.split()
-            mime_types = results[0].split("/")
-
-            infile = open(filename, "rb")
-            contents = infile.read()
             data['result_files'][filename] = ['','','']
-            data['result_files'][filename][0] = base64.b64encode(contents).decode('utf-8')
-            data['result_files'][filename][1] = results[0]
-            data['result_files'][filename][2] = results[1]
-            
-            infile.close()
+            if os.path.exists(filename) is False:
+                print("出力指定ファイル(%s)がありませんでした。"%filename)
+                data['result_files'][filename][1] = "Error"
+                data['result_files'][filename][2] = "出力指定ファイル(%s)がありませんでした。"%filename
+
+            else:
+                p = subprocess.Popen("file -b -i %s"%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                p.wait()
+                stdout_data = p.stdout.read()
+                print("filename(%s) is %s"%(filename, stdout_data))
+                result = stdout_data.decode("utf-8").split("\n")[0]
+                results = result.split()
+                mime_types = results[0].split("/")
+    
+                infile = open(filename, "rb")
+                contents = infile.read()
+                data['result_files'][filename][0] = base64.b64encode(contents).decode('utf-8')
+                data['result_files'][filename][1] = results[0]
+                data['result_files'][filename][2] = results[1]
+             
+                infile.close()
 
         #data['result_files']["XX.dat"] = "yyy"
 
