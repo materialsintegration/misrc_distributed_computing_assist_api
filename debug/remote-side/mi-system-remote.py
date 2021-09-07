@@ -327,7 +327,7 @@ class mi_remote(object):
             print("エラーが発生したので、待ち受け状態に遷移します。")
             self.apiCalcEnd()
             time.sleep(2.0)
-            self.apiEndSend()
+            #self.apiEndSend()
             self.accept_id = None
             return
         print("計算終了。計算終了を通知します")
