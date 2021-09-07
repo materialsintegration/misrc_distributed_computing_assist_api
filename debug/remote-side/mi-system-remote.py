@@ -47,11 +47,12 @@ class mi_remote(object):
             return
 
         current = os.getcwd()
-        for item in items:
+        item_len = len(items) - 1
+        for i in range(item_len):
 
-            if os.path.exists(item) is False:
-                os.mkdir(item)
-                os.chdir(item)
+            if os.path.exists(items[i]) is False:
+                os.mkdir(items[i])
+                os.chdir(items[i])
 
         os.chdir(current)
 
