@@ -49,7 +49,7 @@ class mi_remote(object):
 
             if os.path.exists(item) is False:
                 os.mkdir(item)
-                cd item
+                os.chdir(item)
 
         os.chdir(current)
 
