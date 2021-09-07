@@ -198,16 +198,18 @@ class mi_remote(object):
         # コマンド実行
         p = subprocess.Popen(command_name, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         p.wait()
-        stdout_data = p.stdout.read()
-        stderr_data = p.stderr.read()
+        stdout_data = p.stdout.read().decode("utf-8").split("\n")
+        stderr_data = p.stderr.read().decode("utf-8").split("\n")
 
         # 標準出力
         outfile = open("calc_stdout.txt", "w")
-        outfile.write(stdout_data.decode("utf-8").split("\n"))
+        for item in stdout_data:
+            outfile.write("%s\n"%item)
         outfile.close()
         # 標準エラー
         outfile = open("calc_stderr.txt", "w")
-        outfile.write(stderr_data.decode("utf-8").split("\n"))
+        for item in stderr_data:
+            outfile.write("%s\n"%item)
         outfile.close()
 
         #print(stdout_data)
