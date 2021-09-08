@@ -295,6 +295,7 @@ class mi_remote(object):
                 data['result_files'][filename][0] = base64.b64encode(contents).decode('utf-8')
                 data['result_files'][filename][1] = results[0]
                 data['result_files'][filename][2] = results[1]
+                print("filename(%s) size is %d"%(filename, len(base64.b64encode(contents).decode('utf-8'))))
              
                 infile.close()
 
