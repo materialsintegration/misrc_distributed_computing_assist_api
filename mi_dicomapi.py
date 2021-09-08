@@ -163,7 +163,7 @@ def check_accept_id(accept_id, api_url):
         response = {"message":"There is no data related accept id(%s) in internal dictionary"%accept_id, "code":400}
         return False, response
 
-    log_print(1, flask.request.remote_addr, "[/%s] check accept id qualified"%api_url)
+    log_print(3, flask.request.remote_addr, "[/%s] check accept id qualified"%api_url)
     #print("end check_accept_id function")
     return True, accept_id
 
@@ -415,7 +415,7 @@ def calc_status():
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
         return(make_api_response(message))
 
-    log_print(1, flask.request.remote_addr, "[/status] status:%s"%calc_informations[accept_id]["calc_status"])
+    log_print(3, flask.request.remote_addr, "[/status] status:%s"%calc_informations[accept_id]["calc_status"])
     status = {"message":"status:%s"%calc_informations[accept_id]["calc_status"], "code":200}
     #return flask.jsonift(status)
     return(make_api_response(status))
@@ -434,7 +434,7 @@ def get_calc_result():
 
     # accept_idのデータがあるか？
     if (accept_id in calc_informations) is False:
-        log_print(1, flask.request.remote_addr, "[/status] There is no information about the id(%s)"%accept_id)
+        log_print(3, flask.request.remote_addr, "[/status] There is no information about the id(%s)"%accept_id)
         message = {"message":"There is no information about the id(%s)"%accept_id, "code":400}
         return(make_api_response(message))
 
@@ -446,7 +446,7 @@ def get_calc_result():
     if calc_status == "got return":
         pass
     else:
-        log_print(1, flask.request.remote_addr, "[/get-calc-result] calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id))
+        log_print(2, flask.request.remote_addr, "[/get-calc-result] calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id))
         message = {"message":"calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id), "code":400}
         return(make_api_response(message, status_code=400))
 
@@ -480,13 +480,13 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
 
     # accept_idの確認
     if (accept_id in calc_informations) is False:
-        log_print(1, flask.request.remote_addr, "[/%s] There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
+        log_print(2, flask.request.remote_addr, "[/%s] There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
         message = {"message":"There is no information for accept_id(%s), about the your site id(%s)"%(accept_id, site_id), "code":400}
         return False, message
 
     # 待ち受け開始していない
     if calc_informations[accept_id]["wait_allow"] == "none":
-        log_print(1, flask.request.remote_addr, "[/%s] There is no information which can calc(no wait allow), about the your site-id(%s)"%(url_id, site_id))
+        log_print(2, flask.request.remote_addr, "[/%s] There is no information which can calc(no wait allow), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no wait allow), about the your site id(%s)"%site_id, "code":400}
         return False, message
 
@@ -540,7 +540,7 @@ def calc_request():
 
     infor = {}
     infor[accept_id] = calc_informations[accept_id]["calc-info"]
-    log_print(1, flask.request.remote_addr, "[/calc-request] return information")
+    log_print(3, flask.request.remote_addr, "[/calc-request] return information")
     message = {"message":"There is information that can calc", "code":200, "accept_id":accept_id}
     return(make_api_response(message))
 
@@ -572,11 +572,11 @@ def calc_params():
     if calc_informations[accept_id]["calc_status"] == "not start":
         pass
     else:
-        log_print(1, flask.request.remote_addr, "[/%s] There is no information which can calc(no calc wating), about the your site-id(%s)"%(url_id, site_id))
+        log_print(3, flask.request.remote_addr, "[/%s] There is no information which can calc(no calc wating), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc wating), about the your site id(%s)"%site_id, "code":200}
         return(make_api_response(message))
 
-    log_print(1, flask.request.remote_addr, "[/calc-params] return information")
+    log_print(3, flask.request.remote_addr, "[/calc-params] return information")
     #message = {"message":"There is information that can calc", "code":200, "accept_id":accept_id}
     message = {}
     message["calc-info"] = calc_informations[accept_id]["calc-info"]
@@ -612,7 +612,7 @@ def calc_params_complete():
     if calc_informations[accept_id]["calc_status"] == "sending params":
         pass
     else:
-        log_print(1, flask.request.remote_addr, "[/%s] There is no information which can calc(no params sending), about the your site-id(%s)"%(url_id, site_id))
+        log_print(3, flask.request.remote_addr, "[/%s] There is no information which can calc(no params sending), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no params sending), about the your site id(%s)"%site_id, "code":200}
         return(make_api_response(message))
 
@@ -687,7 +687,7 @@ def calc_end():
     if calc_informations[accept_id]["calc_status"] == "running":
         pass
     else:
-        log_print(1, flask.request.remote_addr, "[/%s] There is no information which can calc(no calc running), about the your site-id(%s)"%(url_id, site_id))
+        log_print(3, flask.request.remote_addr, "[/%s] There is no information which can calc(no calc running), about the your site-id(%s)"%(url_id, site_id))
         message = {"message":"There is no information which can calc(no calc running), about the your site id(%s)"%site_id, "code":200}
         return(make_api_response(message))
 
@@ -720,17 +720,17 @@ def send_results():
     retval, accept_id = check_accept_id_in_requestbody("send-results")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id, status_code=400))
+        return(make_api_response(accept_id, status_code=401))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("send-results")
     if ret is False:
         message = site_id
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=401))
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "send-results")
     if ret is False:
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=401))
 
     url_id = "calc-end"
 
@@ -739,7 +739,7 @@ def send_results():
         pass
     else:
         log_print(1, flask.request.remote_addr, "[/%s] There is no information which can recieve(no calc end), about the your site-id(%s)"%(url_id, site_id))
-        message = {"message":"There is no information which can recieve(no calc end), about the your site id(%s)"%site_id, "code":400}
+        message = {"message":"There is no information which can recieve(no calc end), about the your site id(%s)"%site_id, "code":401}
         return(make_api_response(message))
 
     # bodyのresult_filesキーの確認
@@ -786,7 +786,7 @@ def end_send():
         pass
     else:
         log_print(1, flask.request.remote_addr, "[/%s] There is no information which can recieve end(no calc end or recieving), about the your site-id(%s)"%(url_id, site_id))
-        message = {"message":"There is no information which can recieve end(no calc end or recieving), about the your site id(%s)"%site_id, "code":400}
+        message = {"message":"There is no information which can recieve end(no calc end or recieving), about the your site id(%s)"%site_id, "code":401}
         return(make_api_response(message))
 
     # bodyのresultキーの確認
@@ -800,7 +800,7 @@ def end_send():
     if result != "end send":
         log_print(1, flask.request.remote_addr, "[/%s] unknown string in end-send body"%url_id)
         message = {"message":"unknown string(%s) in end-send body"%result}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=401))
 
     calc_informations[accept_id]["calc_status"] = "got return"
     message = {"message":"ok", "code":200}
