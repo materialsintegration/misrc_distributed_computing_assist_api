@@ -121,6 +121,10 @@ def check_accept_id_in_requestbody(api_url):
     log_print(4, flask.request.remote_addr, "[/%s] checking accept_id key in requestbody."%api_url)
     #print("start check_accept_id function")
     # request bodyにaccept_idが無い
+    if flask.request.is_json is False:
+        log_print(1, flask.request.remote_addr, "[/%s] is not json (checking requestbody)."%api_url)
+        message = {"message":"The Request body is not json format?", "code":400}
+        return False, response
     if ("accept_id" in flask.request.get_json(force=True)) is False:
         log_print(1, flask.request.remote_addr, "[/%s] There is no accept_id key in request body."%api_url)
         response = {"message":"There is no accept id_key in equest body", "code":400}
