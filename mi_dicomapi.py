@@ -732,7 +732,7 @@ def send_results():
         #return flask.make_response(flask.jsonify(accept_id), 400)
         return(make_api_response(accept_id, status_code=401))
 
-    log_print(4, "リクエストボディ内のaccept_id check ok")
+    log_print(4, flask.request.remote_addr, "リクエストボディ内のaccept_id check ok")
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("send-results")
@@ -740,13 +740,13 @@ def send_results():
         message = site_id
         return(make_api_response(message, status_code=401))
 
-    log_print(4, "リクエストボディ内のsite_id check ok")
+    log_print(4, flask.request.remote_addr, "リクエストボディ内のsite_id check ok")
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "send-results")
     if ret is False:
         return(make_api_response(message, status_code=401))
 
-    log_print(4, "site_id 受付check ok")
+    log_print(4, flask.request.remote_addr, "site_id 受付check ok")
 
     url_id = "calc-end"
 
