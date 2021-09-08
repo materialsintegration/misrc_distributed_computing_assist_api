@@ -346,7 +346,7 @@ def main():
 
         if message == "got return":
             break
-        time.sleep(5.0)
+        time.sleep(10.0)
 
     print("get results", flush=True)
     time.sleep(2.0)
