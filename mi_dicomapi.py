@@ -539,7 +539,7 @@ def calc_request():
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     # 計算未登録
     if accept_id is None:
