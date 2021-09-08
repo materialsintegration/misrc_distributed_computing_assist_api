@@ -45,7 +45,7 @@ class mi_workflow(object):
 
         # 標準出力と標準エラーの戻り用のエントリをセットする
         self.data['calc-info']['result_files']["計算標準出力.txt"] = ['','','']
-        self.data['calc-info']['result_files']["計標準エラー出力.txt"] = ['','','']
+        self.data['calc-info']['result_files']["計算標準エラー出力.txt"] = ['','','']
 
         self.session = requests.Session()
 
