@@ -118,16 +118,18 @@ def check_accept_id_in_requestbody(api_url):
     request body内のaccept_idのチェックを行う
     '''
         
-    log_print(4, flask.request.remote_addr, "[/%s] checking accept id in requestbody."%api_url)
+    log_print(4, flask.request.remote_addr, "[/%s] checking accept_id key in requestbody."%api_url)
     #print("start check_accept_id function")
     # request bodyにaccept_idが無い
     if ("accept_id" in flask.request.get_json()) is False:
-        log_print(1, flask.request.remote_addr, "[/%s] There is no accept_id in request body."%api_url)
-        response = {"message":"There is no accept id in equest body", "code":400}
+        log_print(1, flask.request.remote_addr, "[/%s] There is no accept_id key in request body."%api_url)
+        response = {"message":"There is no accept id_key in equest body", "code":400}
         return False, response
     else:
+
+        log_print(4, flask.request.remote_addr, "[/%s] found accept_id key in requestbody ok."%api_url)
         accept_id = flask.request.get_json().get("accept_id")
-    log_print(4, flask.request.remote_addr, "[/%s] check accept id in requestbody ok."%api_url)
+    log_print(4, flask.request.remote_addr, "[/%s] check accept_id key in requestbody ok."%api_url)
 
     return True, accept_id
 
