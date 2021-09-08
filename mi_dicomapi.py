@@ -715,7 +715,7 @@ def send_results():
     遠隔計算機から計算結果の送信
     '''
 
-    log_print(3, flask.request.remote_addr, "[/send-results] recirved result file(s)")
+    log_print(3, flask.request.remote_addr, "[/send-results] recirving result file(s)")
     # accept_id他のチェック
     retval, accept_id = check_accept_id_in_requestbody("send-results")
     if retval is False:
@@ -753,6 +753,7 @@ def send_results():
     calc_informations[accept_id]['calc-info']["result_files"] = result_files
     calc_informations[accept_id]["calc_status"] = "getting return"
     message = {"message":"ok", "code":200}
+    log_print(3, flask.request.remote_addr, "[/send-results] recirved result file(s)")
     return(make_api_response(message))
     
 #---------------------------------------
