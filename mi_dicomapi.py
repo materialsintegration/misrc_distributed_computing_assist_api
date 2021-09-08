@@ -877,7 +877,8 @@ if __name__ == "__main__":
 
     print("Waiting IPaddress / Port Number")
     print("      %s / %s"%(ipaddress, port_num))
-    print(str(app.config))
+    for item in app.config:
+        print("%s : %s"%(item, app.config[item]))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.debug = True
     app.run(host=ipaddress, port=port_num, threaded=True)
