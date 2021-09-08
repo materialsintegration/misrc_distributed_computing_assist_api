@@ -247,7 +247,7 @@ def main():
         print(len(sys.argv))
         sys.exit(1)
 
-    baseUrl = sys.argv[1]
+    baseUrl = "%s:50443"%sys.argv[1]
     token = sys.argv[2]
 
     app = wx.App(False)

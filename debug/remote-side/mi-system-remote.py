@@ -293,7 +293,7 @@ class mi_remote(object):
         print("%s:send request %s/send-results"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=data)
 
-        if ret.status_code >= 500:
+        if ret.status_code >= 500 or ret.status_code == 400 or ret.status_code == 401:
             print("%s:status code = %s / reason = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), ret.status_code, ret.text))
             self.accept_id = None
             return False
