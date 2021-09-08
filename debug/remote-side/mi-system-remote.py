@@ -35,6 +35,7 @@ class mi_remote(object):
         self.command_result = None
         self.calc_info = None
         self.stop_flag = False
+        signal.signal(signal.SIGINT, self.signal_handler)
 
     def signal_handler(self, signum, frame):
         '''
