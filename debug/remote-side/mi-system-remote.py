@@ -212,12 +212,12 @@ class mi_remote(object):
         stderr_data = p.stderr.read().decode("utf-8").split("\n")
 
         # 標準出力
-        outfile = open("calc_stdout.txt", "w")
+        outfile = open("計算標準出力.txt", "w")
         for item in stdout_data:
             outfile.write("%s\n"%item)
         outfile.close()
         # 標準エラー
-        outfile = open("calc_stderr.txt", "w")
+        outfile = open("計算標準エラー出力.txt", "w")
         for item in stderr_data:
             outfile.write("%s\n"%item)
         outfile.close()
