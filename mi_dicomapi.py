@@ -120,7 +120,7 @@ def check_accept_id_in_requestbody(api_url):
         
     log_print(4, flask.request.remote_addr, "[/%s] checking accept_id key in requestbody."%api_url)
     #print("start check_accept_id function")
-    print(flask.request.text)
+    print(flask.request.data)
     # request bodyにaccept_idが無い
     if flask.request.is_json is False:
         log_print(1, flask.request.remote_addr, "[/%s] is not json (checking requestbody)."%api_url)
