@@ -157,13 +157,13 @@ def check_accept_id(accept_id, api_url):
     '''
 
     # 内部データにaccept_idの情報が無い（未登録か、30分ルールで削除されたか
-    # log_print(3, calc_informations)
+    log_print(4, flask.request.remote_addr, "[/%s] checking accept id."%api_url)
     if (accept_id in calc_informations) is False:
         log_print(1, flask.request.remote_addr, "[/%s] There is no date related accept_id(%s) in internal dictionary."%(api_url, accept_id))
         response = {"message":"There is no data related accept id(%s) in internal dictionary"%accept_id, "code":400}
         return False, response
 
-    log_print(3, flask.request.remote_addr, "[/%s] check accept id qualified"%api_url)
+    log_print(4, flask.request.remote_addr, "[/%s] check accept id qualified"%api_url)
     #print("end check_accept_id function")
     return True, accept_id
 
