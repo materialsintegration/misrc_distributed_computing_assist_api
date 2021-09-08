@@ -869,4 +869,4 @@ if __name__ == "__main__":
     print("      %s / %s"%(ipaddress, port_num))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.debug = True
-    app.run(host=ipaddress, port=port_num)
+    app.run(host=ipaddress, port=port_num, threaded=True)

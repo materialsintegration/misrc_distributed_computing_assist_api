@@ -12,6 +12,7 @@ import time
 import datetime
 import subprocess
 import sys, os
+import signal
 
 class mi_remote(object):
     '''
@@ -33,6 +34,14 @@ class mi_remote(object):
         self.accept_id = None
         self.command_result = None
         self.calc_info = None
+        self.stop_flag = False
+
+    def signal_handler(self, signum, frame):
+        '''
+        '''
+
+        if signum == 2:         # ctrl + C
+            self.stop_flag = True
 
 
     def check_directory_in_filename(self, filename):
@@ -409,6 +418,8 @@ def main():
 
     api_prog.request_status = None
     while True:
+        if api_prog.stop_flag is True:
+            break
         if api_prog.apiCalcRequest() is True:
             time.sleep(10)
             print("There is calc in MI-system by accept_id(%s)"%api_prog.accept_id)
