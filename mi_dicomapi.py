@@ -877,7 +877,7 @@ if __name__ == "__main__":
 
     print("Waiting IPaddress / Port Number")
     print("      %s / %s"%(ipaddress, port_num))
-    print("Max content length(%d)"%app.config["MAX_CONTENT_LENGTH"])
+    print(str(app.config))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
     app.debug = True
     app.run(host=ipaddress, port=port_num, threaded=True)
