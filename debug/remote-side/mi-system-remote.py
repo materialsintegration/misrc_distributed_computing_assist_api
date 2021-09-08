@@ -282,8 +282,8 @@ class mi_remote(object):
             data['result_files'][filename] = ['','','']
             if os.path.exists(filename) is False:
                 print("出力指定ファイル(%s)がありませんでした。"%filename)
-                data['result_files'][filename][1] = "Error"
-                data['result_files'][filename][2] = "出力指定ファイル(%s)がありませんでした。"%filename
+                data['result_files'][filename]["mimetype1"] = "Error"
+                data['result_files'][filename]["mimetype2"] = "出力指定ファイル(%s)がありませんでした。"%filename
 
             else:
                 p = subprocess.Popen("file -b -i %s"%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -296,9 +296,9 @@ class mi_remote(object):
     
                 infile = open(filename, "rb")
                 contents = infile.read()
-                data['result_files'][filename][0] = base64.b64encode(contents).decode('utf-8')
-                data['result_files'][filename][1] = results[0]
-                data['result_files'][filename][2] = results[1]
+                data['result_files'][filename]["content"] = base64.b64encode(contents).decode('utf-8')
+                data['result_files'][filename]["mimetype1"] = results[0]
+                data['result_files'][filename]["mimetype2"] = results[1]
                 print("filename(%s) size is %d"%(filename, len(base64.b64encode(contents).decode('utf-8'))))
              
                 infile.close()

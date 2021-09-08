@@ -41,11 +41,14 @@ class mi_workflow(object):
         print("出力ファイルを登録します。")
         for item in result_files:
             print("ファイル名(%s)を追加します。"%item)
-            self.data['calc-info']['result_files'][item] = ['','','']
+            #self.data['calc-info']['result_files'][item] = ['','','']
+            self.data['calc-info']['result_files'][item] = {"content":"", "mimetype1":"", "mimetype2":""}
 
         # 標準出力と標準エラーの戻り用のエントリをセットする
-        self.data['calc-info']['result_files']["計算標準出力.txt"] = ['','','']
-        self.data['calc-info']['result_files']["計算標準エラー出力.txt"] = ['','','']
+        #self.data['calc-info']['result_files']["計算標準出力.txt"] = ['','','']
+        #self.data['calc-info']['result_files']["計算標準エラー出力.txt"] = ['','','']
+        self.data['calc-info']['result_files']["計算標準出力.txt"] = {"content":"", "mimetype1":"", "mimetype2":""}
+        self.data['calc-info']['result_files']["計算標準エラー出力.txt"] = {"content":"", "mimetype1":"", "mimetype2":""}
 
         self.session = requests.Session()
 
@@ -220,18 +223,18 @@ class mi_workflow(object):
         result = ret.json()
         if ("result-info" in result) is True:
             for filename in result["result-info"]["result_files"]:
-                filesize = len(result["result-info"]["result_files"][filename][0])
-                mime_type0 = result["result-info"]["result_files"][filename][1]
-                mime_type1 = result["result-info"]["result_files"][filename][2]
+                filesize = len(result["result-info"]["result_files"][filename]["content"])
+                mime_type0 = result["result-info"]["result_files"][filename]["mimetype1"]
+                mime_type1 = result["result-info"]["result_files"][filename]["mimetype2"]
                 if mime_type1 == "charset=utf-8;" or mime_type1 == "charset=us-ascii;":
                     outfile = open(filename, "w")
-                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0]).decode("utf-8"))
+                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename]["content"]).decode("utf-8"))
                     outfile.close
                 elif mime_type1 == "Error":
                     print(mime_type2)
                 else:
                     outfile = open(filename, "bw")
-                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename][0].encode()))
+                    outfile.write(base64.b64decode(result["result-info"]["result_files"][filename]["content"].encode()))
                     outfile.close
                 print("result file = %s(size=%d / mime_type0(%s); mime_type1(%s))"%(filename, filesize, mime_type0, mime_type1), flush=True)
 
