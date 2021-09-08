@@ -485,19 +485,19 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
     # 識別子未登録
     if is_site_id is False:
         log_print(1, flask.request.remote_addr, "[/%s] Your site-id(%s) does not match in the list that acceptable to."%(url_id, site_id))
-        message = {"message":"Your site-id(%s) does not match in the list that acceptable to."%site_id, "code":400}
+        message = {"message":"Your site-id(%s) does not match in the list that acceptable to."%site_id, "code":"400"}
         return False, message
 
     # accept_idの確認
     if (accept_id in calc_informations) is False:
         log_print(2, flask.request.remote_addr, "[/%s] There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
-        message = {"message":"There is no information for accept_id(%s), about the your site id(%s)"%(accept_id, site_id), "code":400}
+        message = {"message":"There is no information for accept_id(%s), about the your site id(%s)"%(accept_id, site_id), "code":"400"}
         return False, message
 
     # 待ち受け開始していない
     if calc_informations[accept_id]["wait_allow"] == "none":
         log_print(2, flask.request.remote_addr, "[/%s] There is no information which can calc(no wait allow), about the your site-id(%s)"%(url_id, site_id))
-        message = {"message":"There is no information which can calc(no wait allow), about the your site id(%s)"%site_id, "code":400}
+        message = {"message":"There is no information which can calc(no wait allow), about the your site id(%s)"%site_id, "code":"400"}
         return False, message
 
     return True, None
@@ -539,7 +539,7 @@ def calc_request():
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
-        return(make_api_response(message, status_code=402))
+        return(make_api_response(message, status_code=401))
 
     # 計算未登録
     if accept_id is None:
