@@ -127,6 +127,7 @@ def check_accept_id_in_requestbody(api_url):
         return False, response
     else:
         accept_id = flask.request.get_json().get("accept_id")
+    log_print(4, flask.request.remote_addr, "[/%s] check accept id in requestbody ok."%api_url)
 
     return True, accept_id
 
