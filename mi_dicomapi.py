@@ -118,6 +118,7 @@ def check_accept_id_in_requestbody(api_url):
     request body内のaccept_idのチェックを行う
     '''
         
+    log_print(4, flask.request.remote_addr, "[/%s] checking accept id in requestbody."%api_url)
     #print("start check_accept_id function")
     # request bodyにaccept_idが無い
     if ("accept_id" in flask.request.get_json()) is False:
@@ -135,6 +136,7 @@ def check_id_in_requestargs(key, api_url):
     request args内のaccept_idのチェックを行う
     '''
         
+    log_print(4, flask.request.remote_addr, "[/%s] checking %s in request args."%(api_url, key))
     # request bodyにkeyが無い
     key_id = flask.request.args.get(key)
     if key_id is None:
