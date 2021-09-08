@@ -877,6 +877,7 @@ if __name__ == "__main__":
 
     print("Waiting IPaddress / Port Number")
     print("      %s / %s"%(ipaddress, port_num))
+    app.config["JSON_AS_ASCII"] = False
     for item in app.config:
         print("%s : %s"%(item, app.config[item]))
     app.jinja_env.add_extension('jinja2.ext.loopcontrols')
