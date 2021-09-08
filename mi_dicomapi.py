@@ -732,6 +732,7 @@ def send_results():
     if ret is False:
         return(make_api_response(message, status_code=401))
 
+    log_print(4, "site_id check ok")
     url_id = "calc-end"
 
     # 計算終了、計算結果返送待ちか？
@@ -742,11 +743,12 @@ def send_results():
         message = {"message":"There is no information which can recieve(no calc end), about the your site id(%s)"%site_id, "code":401}
         return(make_api_response(message))
 
+    log_print(4, "計算終了して返送まちのチェックOK")
     # bodyのresult_filesキーの確認
     if ("result_files" in flask.request.get_json()) is False:
         log_print(1, flask.request.remote_addr, "[/%s] There is no 'result_files' key in request body"%url_id)
         message = {"message":"There is no 'result_files' key in request body", "code":401}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=401))
 
     result_files = flask.request.get_json()['result_files']
 

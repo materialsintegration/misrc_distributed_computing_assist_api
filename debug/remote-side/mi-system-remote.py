@@ -303,7 +303,7 @@ class mi_remote(object):
             if ("code" in ret.json()) is True:
                 print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
                 if ret.json()["code"] != 200:
-                    self.accept_id = None
+                    #self.accept_id = None
                     return False
         except:
             print("%s:status code = %s / reason = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), ret.status_code, ret.text))
@@ -371,7 +371,7 @@ class mi_remote(object):
         print("結果をアップロードします。")
         if self.apiSendResult() is False:
             print("エラーが発生したので、待ち受け状態に遷移します。")
-            self.apiCalcEnd()
+            self.apiEndSend()
             time.sleep(2.0)
             self.accept_id = None
             return
