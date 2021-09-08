@@ -302,7 +302,7 @@ class mi_remote(object):
         #data['result_files']["XX.dat"] = "yyy"
 
         print("%s:send request %s/send-results"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
-        ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=data)
+        ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=json.dumps(data))
 
         if ret.status_code >= 500 or ret.status_code == 400 or ret.status_code == 401:
             print("%s:status code = %s / reason = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), ret.status_code, ret.text))
