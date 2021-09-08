@@ -279,7 +279,7 @@ class mi_remote(object):
         # 返すべきファイルの取得
         for filename in self.calc_info["calc-info"]["result_files"]:
             # ファイルの種類を特定
-            data['result_files'][filename] = ['','','']
+            data['result_files'][filename] = self.calc_info["calc-info"]["result_files"][filename]
             if os.path.exists(filename) is False:
                 print("出力指定ファイル(%s)がありませんでした。"%filename)
                 data['result_files'][filename]["mimetype1"] = "Error"
