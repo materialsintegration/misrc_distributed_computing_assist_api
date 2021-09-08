@@ -37,7 +37,10 @@ class mi_workflow(object):
         }
         for item in param_files:
             self.data['calc-info']['parameter_files'][item] = ['','','']
+
+        print("出力ファイルを登録します。")
         for item in result_files:
+            print("ファイル名(%s)を追加します。"%item)
             self.data['calc-info']['result_files'][item] = ['','','']
 
         # 標準出力と標準エラーの戻り用のエントリをセットする
