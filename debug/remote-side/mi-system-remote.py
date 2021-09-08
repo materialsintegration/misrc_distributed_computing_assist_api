@@ -35,6 +35,7 @@ class mi_remote(object):
         self.command_result = None
         self.calc_info = None
         self.stop_flag = False
+        self.debug_print = False
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def signal_handler(self, signum, frame):
@@ -70,6 +71,9 @@ class mi_remote(object):
         '''
         レスポンスの表示
         '''
+
+        if self.debug_print is False:
+            return
 
         print("status code:%d"%ret.status_code)
         if ret.status_code != 200 and ret.status_code != 201:
@@ -300,6 +304,8 @@ class mi_remote(object):
                 infile.close()
 
         #data['result_files']["XX.dat"] = "yyy"
+        if self.debug_print is True:
+            print(json.dumps(data, indent=2, ensure_ascii=False))
 
         print("%s:send request %s/send-results"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=data)
@@ -413,12 +419,23 @@ def main():
         print(len(sys.argv))
         sys.exit(1)
 
-    print("site id = %s"%sys.argv[1])
-    print("base url = %s:50443"%sys.argv[2])
-    print(" token = %s"%sys.argv[3])
+    debug_print = False
+    for i in range(len(sys.argv)):
+        if i == 1:
+            print("site id = %s"%sys.argv[1])
+        elif i == 2:
+            print("base url = %s:50443"%sys.argv[2])
+        elif i == 3:
+            print(" token = %s"%sys.argv[3])
+        elif i == 4:
+            if sys.argv[4] == "debug":
+                print("debug print: yes")
+                debug_print = True
+
     api_prog = mi_remote(sys.argv[1], "%s:50443"%sys.argv[2], sys.argv[3])
 
     api_prog.request_status = None
+    api_prog.debug_print = debug_print
     while True:
         if api_prog.stop_flag is True:
             break
