@@ -25,7 +25,7 @@ class mi_remote(object):
         '''
 
         #self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
-        self.headers={'Authorization': 'Bearer %s'%token, 'Content-Type': 'application/json'}
+        self.headers={'Authorization': 'Bearer %s'%token, 'Content-Type': 'application/json', 'Accept': 'application/json'}
         self.session = requests.Session()
 
         #self.base_url = "https://dev-u-tokyo.mintsys.jp/mi-distcomp-api"
@@ -95,6 +95,8 @@ class mi_remote(object):
 
         if self.request_status is not False:
             print("%s:send request %s/calc-request?site_id=%s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url, self.site_id))
+        if self.debug_print is True:
+            print("%s:header = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), str(self.headers)))
         ret = self.session.get("%s/calc-request?site_id=%s"%(self.base_url, self.site_id), headers=self.headers)
 
         if ret.status_code >= 400:
