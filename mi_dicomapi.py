@@ -491,7 +491,7 @@ def check_accept_remote_side_id(accept_id, site_id, url_id):
     # accept_idの確認
     if (accept_id in calc_informations) is False:
         log_print(2, flask.request.remote_addr, "[/%s] There is no information for accept_id(%s), about the your site-id(%s)"%(url_id, accept_id, site_id))
-        message = {"errors":[{"code":"0400","message":"There is no information for accept_id(%s), about the your site id(%s)"%(accept_id, site_id)}]}
+        message = {"errors":[{"code":0400,"message":"There is no information for accept_id(%s), about the your site id(%s)"%(accept_id, site_id)}]}
         return False, message
 
     # 待ち受け開始していない
