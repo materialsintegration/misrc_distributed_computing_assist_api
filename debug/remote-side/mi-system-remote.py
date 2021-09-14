@@ -107,11 +107,11 @@ class mi_remote(object):
 
         #print("status_code = %s(%s)"%(ret.status_code, ret.text))
         if self.request_status is not False:
-            print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
+            print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
-        if ("code" in ret.json()) is True:
-            if ret.json()["errors"]["code"] == 200:
-                self.accept_id = ret.json()["errors"]["accept_id"]
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] == 200:
+                self.accept_id = ret.json()["errors"][0]["accept_id"]
         
         if self.accept_id is None:
             return False
@@ -128,8 +128,8 @@ class mi_remote(object):
 
         #print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
         self.result_out(ret)
-        if ("code" in ret.json()["errors"]) is True:
-            if ret.json()["errors"]["code"] != 200:
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] != 200:
                 self.accept_id = None
                 return False
 
@@ -148,10 +148,10 @@ class mi_remote(object):
         print("%s:send request %s/calc-params-complete"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/calc-params-complete"%self.base_url, headers=self.headers, json=data)
 
-        print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
+        print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
-        if ("code" in ret.json()["errors"]) is True:
-            if ret.json()["errors"]["code"] != 200:
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] != 200:
                 self.accept_id = None
                 return False
 
@@ -169,10 +169,10 @@ class mi_remote(object):
         print("%s:send request %s/calc-start"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/calc-start"%self.base_url, headers=self.headers, json=data)
 
-        print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
+        print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
-        if ("code" in ret.json()["errors"]) is True:
-            if ret.json()["errors"]["code"] != 200:
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] != 200:
                 self.accept_id = None
                 return False
 
@@ -257,10 +257,10 @@ class mi_remote(object):
         print("%s:send request %s/calc-end"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/calc-end"%self.base_url, headers=self.headers, json=data)
 
-        print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
+        print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
-        if ("code" in ret.json()["errors"]) is True:
-            if ret.json()["errors"]["code"] != 200:
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] != 200:
                 self.accept_id = None
                 return False
 
@@ -320,9 +320,9 @@ class mi_remote(object):
 
         #self.result_out(ret)
         try:
-            if ("code" in ret.json()["errors"]) is True:
-                print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
-                if ret.json()["errors"]["code"] != 200:
+            if ("code" in ret.json()["errors"][0]) is True:
+                print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
+                if ret.json()["errors"][0]["code"] != 200:
                     #self.accept_id = None
                     return False
         except:
@@ -344,10 +344,10 @@ class mi_remote(object):
         print("%s:send request %s/end-send"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/end-send"%self.base_url, headers=self.headers, json=data)
 
-        print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]))
+        print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
-        if ("code" in ret.json()["errors"]) is True:
-            if ret.json()["errors"]["code"] != 200:
+        if ("code" in ret.json()["errors"][0]) is True:
+            if ret.json()["errors"][0]["code"] != 200:
                 self.accept_id = None
                 return False
 
