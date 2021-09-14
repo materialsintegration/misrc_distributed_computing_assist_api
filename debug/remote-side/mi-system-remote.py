@@ -252,8 +252,28 @@ class mi_remote(object):
         data['site_id'] = self.site_id
         if self.command_result != 0:
             data['result'] = "abnormal"
+            # 標準出力
+            #if os.path.exists("計算標準出力.txt", "rb") is True:
+            #    infile = open("計算標準出力.txt", "rb")
+            #    contents = infile.read()
+            #    data['stdout'] = {'exists':'yes'}
+            #    data['stdout']["content"] = base64.b64encode(contents).decode('utf-8')
+            #    infile.close()
+            #else:
+            #    data['stdout'] = {'exists':'no'}
+            # 標準出力
+            #if os.path.exists("計算標準エラー出力.txt") is True:
+            #    infile = open("計算標準エラー出力.txt", "rb")
+            #    contents = infile.read()
+            #    data['stdout'] = {'exists':'yes'}
+            #    data['stderr']["content"] = base64.b64encode(contents).decode('utf-8')
+            #    infile.close()
+            #else:
+            #    data['stderr'] = {'exists':'no'}
         else:
             data['result'] = status
+            #data['stdout'] = {'exists':'no'}
+            #data['stderr'] = {'exists':'no'}
 
         print("%s:send request %s/calc-end"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/calc-end"%self.base_url, headers=self.headers, json=data)
@@ -373,10 +393,10 @@ class mi_remote(object):
         time.sleep(10)
         print("計算を開始します。")
         if self.apiCalcStart() is False:
-            print("エラーが発生したので、待ち受け状態に遷移します。")
-            self.apiCalcEnd()
+            print("エラーが発生したので、送信できるファイルを送信して、待ち受け状態に遷移します。")
+            self.apiSendResult()
             time.sleep(2.0)
-            #self.apiEndSend()
+            self.apiEndSend()
             self.accept_id = None
             return
         print("計算終了。計算終了を通知します")

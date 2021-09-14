@@ -341,9 +341,10 @@ def main():
     priv_message = "unknown"
     while True:         # 計算終了になるまでループ
         ret, messages = api_prog.miDistApiStatus()
-        if ret is False:
-            print(messages, flush=True)
-            sys.exit(1)
+        calc_status = messages.split(":")[1]
+        #if ret is False:
+        #    print(messages, flush=True)
+        #    sys.exit(1)
 
         message = messages.split(":")[1]
         if priv_message != message:
@@ -363,6 +364,8 @@ def main():
 
     print("calc end", flush=True)
     api_prog.accept_id = None
+    if calc_status == "abnormal":
+        sys.exit(1)
     sys.exit(0)
 
 if __name__ == '__main__':
