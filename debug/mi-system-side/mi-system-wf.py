@@ -353,7 +353,7 @@ def main():
             print("status change from %s to %s"%(priv_message, message), flush=True)
             priv_message = message
 
-        if message == "got return"
+        if message == "got return":
             break
         time.sleep(10.0)
 
