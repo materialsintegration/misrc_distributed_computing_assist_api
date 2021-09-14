@@ -220,7 +220,7 @@ class mi_workflow(object):
         if code != 200:
             return False, message
 
-        result = ret.json()
+        result = ret.json()["errors"][0]
         if ("result-info" in result) is True:
             for filename in result["result-info"]["result_files"]:
                 filesize = len(result["result-info"]["result_files"][filename]["content"])
