@@ -748,10 +748,10 @@ def send_results():
 
     log_print(4, flask.request.remote_addr, "site_id 受付check ok")
 
-    url_id = "calc-end"
+    url_id = "send-result"
 
     # 計算終了、計算結果返送待ちか？
-    if calc_informations[accept_id]["calc_status"] == "calc end":
+    if calc_informations[accept_id]["calc_status"] == "calc end" or calc_informations[accept_id]["calc_status"] == "abnormal":
         pass
     else:
         log_print(1, flask.request.remote_addr, "[/%s] There is no information which can recieve(no calc end), about the your site-id(%s)"%(url_id, site_id))
@@ -796,11 +796,11 @@ def end_send():
     if ret is False:
         return(make_api_response(message, status_code=400))
 
-    url_id = "calc-end"
+    url_id = "end-send"
 
     # 計算終了、計算結果返送待ちか？
     calc_status = calc_informations[accept_id]["calc_status"]
-    if calc_status == "calc end" or calc_status == "getting return":
+    if calc_status == "calc end" or calc_status == "getting return" or calc_status == "abnormal":
         pass
     else:
         log_print(1, flask.request.remote_addr, "[/%s] There is no information which can recieve end(no calc end or recieving), about the your site-id(%s)"%(url_id, site_id))
