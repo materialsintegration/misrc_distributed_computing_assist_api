@@ -237,6 +237,7 @@ class mi_remote(object):
         if result != 0:
             print("コマンド異常終了？")
             self.command_result = 1
+            return False
         else:
             self.command_result = 0
 
