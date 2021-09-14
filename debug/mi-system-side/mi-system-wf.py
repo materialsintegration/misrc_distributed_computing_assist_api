@@ -129,8 +129,8 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
@@ -151,8 +151,8 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
@@ -170,8 +170,8 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
@@ -191,8 +191,8 @@ class mi_workflow(object):
 
         #print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         print("code = %s / message = %s"%(code, message), flush=True)
         if message == "status:abnormal":
             return False, message
@@ -215,8 +215,8 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         if code != 200:
             return False, message
 
@@ -230,8 +230,8 @@ class mi_workflow(object):
                     outfile = open(filename, "w")
                     outfile.write(base64.b64decode(result["result-info"]["result_files"][filename]["content"]).decode("utf-8"))
                     outfile.close
-                elif mime_type1 == "Error":
-                    print(mime_type2)
+                elif mime_type0 == "Error":
+                    print(mime_type1)
                 else:
                     outfile = open(filename, "bw")
                     outfile.write(base64.b64decode(result["result-info"]["result_files"][filename]["content"].encode()))
@@ -276,10 +276,10 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False, ret.text
 
-        print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]), flush=True)
+        print("code = %s / message = %s"%(ret.json()["errors"]["code"], ret.json()["errors"]["message"]), flush=True)
 
-        code = ret.json()["code"]
-        message = ret.json()["message"]
+        code = ret.json()["errors"]["code"]
+        message = ret.json()["errors"]["message"]
         print("code = %s / message = %s"%(code, message), flush=True)
 
         if code != 200:
