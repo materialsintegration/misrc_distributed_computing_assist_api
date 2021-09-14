@@ -339,9 +339,11 @@ def main():
     print("wait untill end", flush=True)
     time.sleep(2.0)
     priv_message = "unknown"
+    calc_status = ""
     while True:         # 計算終了になるまでループ
         ret, messages = api_prog.miDistApiStatus()
-        calc_status = messages.split(":")[1]
+        if messages.split(":")[1] == "abnormal":
+            calc_status = messages.split(":")[1]
         #if ret is False:
         #    print(messages, flush=True)
         #    sys.exit(1)
@@ -351,7 +353,7 @@ def main():
             print("status change from %s to %s"%(priv_message, message), flush=True)
             priv_message = message
 
-        if message == "got return" or calc_status == "abnormal":
+        if message == "got return"
             break
         time.sleep(10.0)
 

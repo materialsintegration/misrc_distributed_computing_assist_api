@@ -458,7 +458,7 @@ def get_calc_result():
     else:
         log_print(2, flask.request.remote_addr, "[/get-calc-result] calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id))
         message = {"errors":[{"message":"calc can not return(status = %s / accept_id = %s)"%(calc_status, accept_id), "code":400}]}
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=200))
 
     # 指定されたaccept_idの情報を削除する。
     delete_calc_information(accept_id)
