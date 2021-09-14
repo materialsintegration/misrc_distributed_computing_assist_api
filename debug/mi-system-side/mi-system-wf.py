@@ -72,7 +72,7 @@ class mi_workflow(object):
         if ret.status_code != 200 and ret.status_code != 201:
             print("error ?:%s"%ret.text, flush=True)
         else:
-            items = ret.json()
+            items = ret.json()["errors"][0]
             #print(items)
             for accept_id in items:
                 if ("calc-info" in items[accept_id]) is False:
@@ -111,7 +111,7 @@ class mi_workflow(object):
             print("error ?:%s"%ret.text, flush=True)
             return False
         else:
-            self.accept_id = ret.json()["accept_id"]
+            self.accept_id = ret.json()["errors"][0]["accept_id"]
             print("accept_id = %s"%self.accept_id, flush=True)
 
         return True
