@@ -539,7 +539,7 @@ def calc_request():
     # site_id/accept_idのチェック 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-request")
     if ret is False:
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     # 計算未登録
     if accept_id is None:
@@ -730,7 +730,7 @@ def send_results():
     retval, accept_id = check_accept_id_in_requestbody("send-results")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id, status_code=401))
+        return(make_api_response(accept_id, status_code=200))
 
     log_print(4, flask.request.remote_addr, "リクエストボディ内のaccept_id check ok")
 
@@ -738,13 +738,13 @@ def send_results():
     ret, site_id = check_site_id_in_requestbody("send-results")
     if ret is False:
         message = site_id
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     log_print(4, flask.request.remote_addr, "リクエストボディ内のsite_id check ok")
 
     ret, message = check_accept_remote_side_id(accept_id, site_id, "send-results")
     if ret is False:
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     log_print(4, flask.request.remote_addr, "site_id 受付check ok")
 
@@ -763,7 +763,7 @@ def send_results():
     if ("result_files" in flask.request.get_json()) is False:
         log_print(1, flask.request.remote_addr, "[/%s] There is no 'result_files' key in request body"%url_id)
         message = {"message":"There is no 'result_files' key in request body", "code":401}
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     result_files = flask.request.get_json()['result_files']
 
@@ -818,7 +818,7 @@ def end_send():
     if result != "end send":
         log_print(1, flask.request.remote_addr, "[/%s] unknown string in end-send body"%url_id)
         message = {"message":"unknown string(%s) in end-send body"%result}
-        return(make_api_response(message, status_code=401))
+        return(make_api_response(message, status_code=200))
 
     calc_informations[accept_id]["calc_status"] = "got return"
     message = {"message":"ok", "code":200}

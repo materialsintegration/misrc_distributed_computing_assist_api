@@ -43,6 +43,7 @@ class mi_remote(object):
         '''
 
         if signum == 2:         # ctrl + C
+            print("Ctrl + C スクリプト停止要求受付。。。")
             self.stop_flag = True
 
 
