@@ -93,6 +93,9 @@ class mi_workflow(object):
         '''
 
         for filename in self.data["calc-info"]["parameter_files"]:
+            if os.path.exists(filename) is False:
+                print("ファイル名：%s は存在しないのでパラメータとして送信しません。"%filename)
+                continue
             p = subprocess.Popen('file -i -b "%s"'%filename, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             p.wait()
             stdout_data = p.stdout.read()
