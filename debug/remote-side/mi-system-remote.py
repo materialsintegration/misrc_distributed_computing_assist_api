@@ -118,7 +118,7 @@ class mi_remote(object):
                     res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             elif method == "post":
                 try:
-                    res = session.post(weburl, data=invdata, headers=headers, params=params, timeout=timeout)
+                    res = session.post(weburl, headers=headers, timeout=timeout)
                     sessionError = False
                 except requests.ConnectTimeout:
                     res = timeout_object()
@@ -134,7 +134,7 @@ class mi_remote(object):
                     res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             elif method == "put":
                 try:
-                    res = session.put(weburl, data=invdata, headers=headers, params=params, json=json, timeout=timeout)
+                    res = session.put(weburl, headers=headers, json=json, timeout=timeout)
                     sessionError = False
                 except requests.ConnectTimeout:
                     res = timeout_object()
