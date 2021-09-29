@@ -150,11 +150,13 @@ class mi_remote(object):
                     res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             if sessionError is True:
                 if retry_count != 0:
-                    sys.stderr.write("%s:%s%s 秒後に再接続します。(リトライ回数（%d))"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_interval, retry_count))
+                    sys.stderr.write("%s:%s%s 秒後に再接続します。(リトライ回数（%d))\n"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_interval, retry_count))
                     sys.stderr.flush()
                 else:
-                    sys.stderr.write("%s:%s%d 回の再接続に失敗しました。終了します。"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_count))
+                    sys.stderr.write("%s:%s%d 回の再接続に失敗しました。終了します。\n"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_count))
                     sys.stderr.flush()
+                    if res.status_code is not None:
+                        res.status_code = 500
                     break
                 retry_count -= 1
                 time.sleep(self.retry_interval)
