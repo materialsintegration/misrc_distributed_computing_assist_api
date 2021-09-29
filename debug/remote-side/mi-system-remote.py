@@ -211,7 +211,8 @@ class mi_remote(object):
             print("%s:send request %s/calc-request?site_id=%s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url, self.site_id))
         if self.debug_print is True:
             print("%s:header = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), str(self.headers)))
-        ret = self.session.get("%s/calc-request?site_id=%s"%(self.base_url, self.site_id), headers=self.headers)
+        #ret = self.session.get("%s/calc-request?site_id=%s"%(self.base_url, self.site_id), headers=self.headers)
+        ret = self.apiAccess("get", "%s/calc-request?site_id=%s"%(self.base_url, self.site_id), headers=self.headers)
 
         if ret.status_code >= 400:
             print("%s:status code = %s / reason = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), ret.status_code, ret.text))
@@ -237,7 +238,8 @@ class mi_remote(object):
         '''
 
         print("%s:send request %s/calc-params?accept_id=%s&site_id=%s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url, self.accept_id, self.site_id))
-        ret = self.session.get("%s/calc-params?accept_id=%s&site_id=%s"%(self.base_url, self.accept_id, self.site_id), headers=self.headers)
+        #ret = self.session.get("%s/calc-params?accept_id=%s&site_id=%s"%(self.base_url, self.accept_id, self.site_id), headers=self.headers)
+        ret = self.apiAccess("get", "%s/calc-params?accept_id=%s&site_id=%s"%(self.base_url, self.accept_id, self.site_id), headers=self.headers)
 
         #print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
         if self.debug_print is True:
@@ -260,7 +262,8 @@ class mi_remote(object):
         data['site_id'] = self.site_id
 
         print("%s:send request %s/calc-params-complete"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
-        ret = self.session.post("%s/calc-params-complete"%self.base_url, headers=self.headers, json=data)
+        #ret = self.session.post("%s/calc-params-complete"%self.base_url, headers=self.headers, json=data)
+        ret = self.apiAccess("post", "%s/calc-params-complete"%self.base_url, headers=self.headers, json=data)
 
         print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
@@ -281,7 +284,8 @@ class mi_remote(object):
         data['site_id'] = self.site_id
 
         print("%s:send request %s/calc-start"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
-        ret = self.session.post("%s/calc-start"%self.base_url, headers=self.headers, json=data)
+        #ret = self.session.post("%s/calc-start"%self.base_url, headers=self.headers, json=data)
+        ret = self.apiAccess("post", "%s/calc-start"%self.base_url, headers=self.headers, json=data)
 
         print("code = %s / message = %s"%(ret.json()["errors"][0]["code"], ret.json()["errors"][0]["message"]))
         #self.result_out(ret)
@@ -391,6 +395,7 @@ class mi_remote(object):
 
         print("%s:send request %s/calc-end"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
         ret = self.session.post("%s/calc-end"%self.base_url, headers=self.headers, json=data)
+        ret = self.apiAccess("post", "%s/calc-end"%self.base_url, headers=self.headers, json=data)
 
         #self.result_out(ret)
         if ("errors" in ret.json()) is True:
@@ -446,7 +451,8 @@ class mi_remote(object):
             print(json.dumps(data, indent=2, ensure_ascii=False))
 
         print("%s:send request %s/send-results"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
-        ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=data)
+        #ret = self.session.post("%s/send-results"%self.base_url, headers=self.headers, json=data)
+        ret = self.apiAccess("post", "%s/send-results"%self.base_url, headers=self.headers, json=data)
 
         if ret.status_code >= 500 or ret.status_code == 400 or ret.status_code == 401:
             print("%s:status code = %s / reason = %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), ret.status_code, ret.text))
@@ -477,7 +483,8 @@ class mi_remote(object):
         data['result'] = "end send"
 
         print("%s:send request %s/end-send"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), self.base_url))
-        ret = self.session.post("%s/end-send"%self.base_url, headers=self.headers, json=data)
+        #ret = self.session.post("%s/end-send"%self.base_url, headers=self.headers, json=data)
+        ret = self.apiAccess("post", "%s/end-send"%self.base_url, headers=self.headers, json=data)
 
         #self.result_out(ret)
         if ("errors" in ret.json()) is True:
