@@ -604,18 +604,18 @@ def calc_params_complete():
     retval, accept_id = check_accept_id_in_requestbody("calc-params-complete")
     if retval is False:
         #return flask.make_response(flask.jsonify(accept_id), 400)
-        return(make_api_response(accept_id, status_code=400))
+        return(make_api_response(accept_id, status_code=200))
 
     # site_id
     ret, site_id = check_site_id_in_requestbody("calc-params-complet")
     if ret is False:
         message = site_id
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=200))
 
     # 対象か？
     ret, message = check_accept_remote_side_id(accept_id, site_id, "calc-params-complete")
     if ret is False:
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=200))
 
     # パラメータ送信中かの確認
     url_id = "calc-params-complete"
