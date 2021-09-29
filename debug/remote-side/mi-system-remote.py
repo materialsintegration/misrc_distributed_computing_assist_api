@@ -98,6 +98,8 @@ class mi_remote(object):
         session = self.session
         while True:
             sessionError = True
+            if self.stop_flag is True:
+                break
             if method == "get":
                 try:
                     res = session.get(weburl, data=invdata, headers=headers, timeout=timeout)
