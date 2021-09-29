@@ -572,6 +572,8 @@ def main():
         sys.exit(1)
 
     debug_print = False
+    retry_count = 5
+    retry_iterval = 60.0
     for i in range(len(sys.argv)):
         if i == 1:
             print("site id = %s"%sys.argv[1])
@@ -579,12 +581,20 @@ def main():
             print("base url = %s:50443"%sys.argv[2])
         elif i == 3:
             print(" token = %s"%sys.argv[3])
-        elif i == 4:
-            if sys.argv[4] == "debug":
+        elif i >= 4:
+            if sys.argv[i] == "debug":
                 print("debug print: yes")
                 debug_print = True
+            if sys.argv[i].startswith("retry") is True:
+                try:
+                    items = sys.argv[i].split(":")
+                    items = items.split(",")
+                    retry_count = int(items[0])
+                    retry_interval = float(items[1])
+                except:
+                    pass
 
-    api_prog = mi_remote(sys.argv[1], "%s:50443"%sys.argv[2], sys.argv[3])
+    api_prog = mi_remote(sys.argv[1], "%s:50443"%sys.argv[2], sys.argv[3], retry_count=retry_count, retry_interval=retry_interval)
 
     api_prog.request_status = None
     api_prog.debug_print = debug_print
