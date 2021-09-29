@@ -38,7 +38,7 @@ class connection_error_object(object):
         コンストラクタ
 
         '''
-        self.status_code = "-1"
+        self.status_code = 500
         self.text = ""
 
 
