@@ -573,7 +573,7 @@ def main():
 
     debug_print = False
     retry_count = 5
-    retry_iterval = 60.0
+    retry_interval = 60.0
     for i in range(len(sys.argv)):
         if i == 1:
             print("site id = %s"%sys.argv[1])
