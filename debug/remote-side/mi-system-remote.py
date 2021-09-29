@@ -13,15 +13,48 @@ import datetime
 import subprocess
 import sys, os
 import signal
+import urllib3
+
+class timeout_object(object):
+    '''
+    タイムアウト時にrequestsのレスポンスオブジェクトと似たような振る舞いをするオブジェクト
+    '''
+
+    def __init__(self):
+        '''
+        コンストラクタ
+
+        '''
+        self.status_code = None
+        self.text = "Timeout"
+
+class connection_error_object(object):
+    '''
+    接続エラーのための擬似応答オブジェクト
+    '''
+
+    def __init__(self):
+        '''
+        コンストラクタ
+
+        '''
+        self.status_code = "-1"
+        self.text = ""
+
 
 class mi_remote(object):
     '''
     APIデバッグ、GUI版
     '''
 
-    def __init__(self, siteId, baseUrl, token):
+    def __init__(self, siteId, baseUrl, token, retry_count=5, retry_interval=10, timeout=None):
         '''
         初期化
+        @param siteId (string)
+        @param baseUrl (string)
+        @param token (string) APIアクセストークン（MIntシステム発行）
+        @param retry_count (int) APIアクセス失敗時のリトライ回数
+        @param retry_interval (float) APIアクセス失敗時のリトライ間隔
         '''
 
         #self.headers={'Authorization': 'Bearer 13bedfd69583faa62be240fcbcd0c0c0b542bc92e1352070f150f8a309f441ed', 'Content-Type': 'application/json'}
@@ -36,6 +69,9 @@ class mi_remote(object):
         self.calc_info = None
         self.stop_flag = False
         self.debug_print = False
+        self.retry_count = retry_count
+        self.retry_interval = retry_interval
+        self.timeout = timeout
         signal.signal(signal.SIGINT, self.signal_handler)
 
     def signal_handler(self, signum, frame):
@@ -46,6 +82,83 @@ class mi_remote(object):
             print("Ctrl + C スクリプト停止要求受付。。。")
             self.stop_flag = True
 
+    def apiAccess(self, method, weburl, headers=None, json=None):
+        '''
+        APIアクセスを一括で管理（アクセス失敗をリトライカウントとリトライ間隔で）
+        @param weburl (string)
+        @param headers (dict/json) リクエストヘッダ
+        @param json (dict/json) リクエストボディ
+        @retval 応答ボディ(requests.response)
+        '''
+
+        retry_count = self.retry_count
+        retry_interval = self.retry_interval
+        invdata = params = None
+        timeout = self.timeout
+        session = self.session
+        while True:
+            maxRetryError = False
+            if method == "get":
+                try:
+                    res = session.get(weburl, data=invdata, headers=headers, timeout=timeout)
+                except requests.ConnectTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーに接続できませんでした（timeout = %s秒)"%timeout[0]
+                except requests.ReadTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
+                except requests.ConnectionError as e:
+                    res = connection_error_object()
+                    res.text += "\n%s"%e
+                except urllib3.exceptions.MaxRetryError as e:
+                    res = connection_error_object()
+                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    maxRetryError = True
+            elif method == "post":
+                try:
+                    res = session.post(weburl, data=invdata, headers=headers, params=params, timeout=timeout)
+                except requests.ConnectTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーに接続できませんでした（timeout = %s秒)"%timeout[0]
+                except requests.ReadTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
+                except requests.ConnectionError as e:
+                    res = connection_error_object()
+                    res.text += "\n%s"%e
+                except urllib3.exceptions.MaxRetryError as e:
+                    res = connection_error_object()
+                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    maxRetryError = True
+            elif method == "put":
+                try:
+                    res = session.put(weburl, data=invdata, headers=headers, params=params, json=json, timeout=timeout)
+                except requests.ConnectTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーに接続できませんでした（timeout = %s秒)"%timeout[0]
+                except requests.ReadTimeout:
+                    res = timeout_object()
+                    res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
+                except requests.ConnectionError as e:
+                    res = connection_error_object()
+                    res.text += "\n%s"%e
+                except urllib3.exceptions.MaxRetryError as e:
+                    res = connection_error_object()
+                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    maxRetryError = True
+            if maxRetryError is True:
+                if retry_count != 0:
+                    sys.stderr.write("%s:%s%s 秒後に再接続します。(リトライ回数（%d))"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_interval, retry_count))
+                    sys.stderr.flush()
+                else:
+                    sys.stderr.write("%s:%s%d 回の再接続に失敗しました。終了します。"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_count))
+                    sys.stderr.flush()
+                retry_count -= 1
+                time.sleep(self.retry_interval)
+            else:
+                break
+
+        return res
 
     def check_directory_in_filename(self, filename):
         '''
