@@ -110,10 +110,10 @@ class mi_remote(object):
                     res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
                 except requests.ConnectionError as e:
                     res = connection_error_object()
-                    res.text += "\n%s"%e
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
                 except urllib3.exceptions.MaxRetryError as e:
                     res = connection_error_object()
-                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             elif method == "post":
                 try:
                     res = session.post(weburl, data=invdata, headers=headers, params=params, timeout=timeout)
@@ -126,10 +126,10 @@ class mi_remote(object):
                     res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
                 except requests.ConnectionError as e:
                     res = connection_error_object()
-                    res.text += "\n%s"%e
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
                 except urllib3.exceptions.MaxRetryError as e:
                     res = connection_error_object()
-                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             elif method == "put":
                 try:
                     res = session.put(weburl, data=invdata, headers=headers, params=params, json=json, timeout=timeout)
@@ -142,10 +142,10 @@ class mi_remote(object):
                     res.text = "サーバーから応答がありませんでした（timeout = %s秒)"%timeout[1]
                 except requests.ConnectionError as e:
                     res = connection_error_object()
-                    res.text += "\n%s"%e
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
                 except urllib3.exceptions.MaxRetryError as e:
                     res = connection_error_object()
-                    res.text = "%s:URL(%s)に接続できませんでした。"%weburl
+                    res.text = "%sによりURL(%s)に接続できませんでした。"%(e, weburl)
             if sessionError is True:
                 if retry_count != 0:
                     sys.stderr.write("%s:%s%s 秒後に再接続します。(リトライ回数（%d))"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_interval, retry_count))
@@ -153,6 +153,7 @@ class mi_remote(object):
                 else:
                     sys.stderr.write("%s:%s%d 回の再接続に失敗しました。終了します。"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), res.text, retry_count))
                     sys.stderr.flush()
+                    break
                 retry_count -= 1
                 time.sleep(self.retry_interval)
             else:
