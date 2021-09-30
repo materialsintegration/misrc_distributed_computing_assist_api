@@ -15,6 +15,31 @@ import sys, os
 import signal
 import urllib3
 
+# トークン取得のためのログイン
+def getToken(baseurl):
+    '''
+    @param baseurl(string) e.g. nims.mintsys.jp
+    @retval token(string)
+    '''
+
+    if ("AUTHENTICATION_OPERATOR" in os.environ) is False:
+        print("ログイン用ライブラリのインストール先を設定する環境変数（AUTHENTICATION_OPERATOR）の定義がありません。")
+        sys.exit(1)
+    if os.path.exists(os.environ["AUTHENTICATION_OPERATOR"]) is False:
+        print("ログイン用ライブラリがありません（%s）"%os.environ["AUTHENTICATION_OPERATOR"])
+        sys.exit(1)
+    sys.path.append(os.environ["AUTHENTICATION_OPERATOR"])
+    from openam_operator import openam_operator
+
+    uid, token = openam_operator.miLogin(baseurl)
+
+    if uid is None:
+        print("ログインに失敗しました")
+        sys.exit(1)
+
+    return token
+
+
 class timeout_object(object):
     '''
     タイムアウト時にrequestsのレスポンスオブジェクトと似たような振る舞いをするオブジェクト
@@ -574,13 +599,22 @@ def main():
     debug_print = False
     retry_count = 5
     retry_interval = 60.0
+    siteid = None
+    token = None
+    baseUrl = None
     for i in range(len(sys.argv)):
         if i == 1:
             print("site id = %s"%sys.argv[1])
+            siteid = sys.argv[1]
         elif i == 2:
             print("base url = %s:50443"%sys.argv[2])
+            baseUrl = sys.argv[2]
         elif i == 3:
-            print(" token = %s"%sys.argv[3])
+            if sys.argv[3] == "login":
+                token = getToken(baseUrl.split("//")[1])
+            else:
+                token = sys.argv[3]
+            print(" token = %s"%token)
         elif i >= 4:
             if sys.argv[i] == "debug":
                 print("debug print: yes")
@@ -594,7 +628,7 @@ def main():
                 except:
                     pass
 
-    api_prog = mi_remote(sys.argv[1], "%s:50443"%sys.argv[2], sys.argv[3], retry_count=retry_count, retry_interval=retry_interval)
+    api_prog = mi_remote(siteid, "%s:50443"%baseUrl, token, retry_count=retry_count, retry_interval=retry_interval)
 
     api_prog.request_status = None
     api_prog.debug_print = debug_print
@@ -614,4 +648,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-                               
