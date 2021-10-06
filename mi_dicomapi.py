@@ -47,6 +47,9 @@ remote_site_ids = []
 #                  "kobelco":[]}
 valid_commands = {}
 BASE_URL = "mi-distcomp-api"     # ベースURL
+PREV_MESSAGE = None              # ログ抑制用直前メッセージ保存
+SUSPRESSION_COUNT = 0            # 抑止したログの数
+LOGLEVEL = 4                     # デフォルトログ記録レベル
 
 #==================== 補助関数   ===========================
 def check_dict():
@@ -88,11 +91,32 @@ def log_print(loglevel, from_url, mes):
     ログ出力
     '''
 
+    global PREV_MESSAGE
+    global SUSPRESSION_COUNT
+    global LOGLEVEL
+
     #print(message)
     try:
         loglevel = int(loglevel)
     except:
         loglevel = 4
+
+    # ログレベル表示制限判定
+    if loglevel <= LOGLEVEL:
+        pass
+    else:
+        return
+
+    # 同じログ抑止判定
+    if PREV_MESSAGE == mes:
+        SUSPRESSION_COUNT += 1
+        return
+    else:
+        if SUSPRESSION_COUNT != 0:
+            message = "%s API [] message(%s) %d times"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), PREV_MESSAGE, SUSPRESSION_COUNT)
+            logfile.info(message)
+        PREV_MESSAGE = mes
+        SUPRESSION_COUNT = 0
 
     if loglevel == 0:           # critical
         message = "%s CRITICAL [%s] %s"%(datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S"), from_url, mes)
@@ -190,13 +214,14 @@ def make_api_response(response_text, token="", status_code=200):
     return response
 
 #---------------------------------------
-def get_valid_commands():
+def get_system_config():
     '''
     登録済みのコマンドであるかどうかの情報読み込み
     '''
 
     global remote_site_ids
     global valid_commands
+    global LOGLEVEL
 
     valid_commands = {}
 
@@ -216,6 +241,10 @@ def get_valid_commands():
             commands = parser.get(server, "commands").split()
             for command in commands:
                 valid_commands[server].append(command)
+    # ログレベル読み込み
+    if parser.has_section("Server") is True:
+        if parser.has_option("Server", "loglevel") is True:
+            LOGLEVEL = int(parser.get("Server", "loglevel"))
 
 #==================== デバッグ用 ===========================
 @app.route("/%s/get-calcinfo"%BASE_URL)
@@ -268,7 +297,7 @@ def add_calcinfo():
     # チェック中はvalid_commandsの作り直し禁止
     lock.acquire()
     # 最新の適正コマンドリストの読み込み
-    get_valid_commands()
+    get_system_config()
 
     # コマンドの確認
     command_name = None
@@ -853,7 +882,7 @@ if __name__ == "__main__":
     if os.path.exists(inifilename) is True:
         parser.read(inifilename)
 #    # 許可サイトの読み込み
-    get_valid_commands()                           # 初回読み込み
+    get_system_config()                           # 初回読み込み
 #    if parser.has_section("RemoteSites") is True:
 #        remote_site_ids = parser.get("RemoteSites", "remote_site_ids").split()
 #    print("remote servers")
