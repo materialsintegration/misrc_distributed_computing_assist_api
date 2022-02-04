@@ -1,4 +1,9 @@
 #!python3.6
+# Copyright (c) The University of Tokyo and
+# National Institute for Materials Science (NIMS). All rights reserved.
+# This document may not be reproduced or transmitted in any form,
+# in whole or in part, without the express written permission of
+# the copyright owners.
 # -*- coding: utf-8 -*-
 
 '''
@@ -205,6 +210,27 @@ class mi_workflow(object):
 
         return True, message
     
+    def miDistApiProgress(self):
+        '''
+        progress APIの実行
+        '''
+
+        ret = self.session.get("%s/calc-progress?accept_id=%s"%(self.base_url, self.accept_id), headers=self.headers)
+        if ret.status_code != 200 and ret.status_code != 201:
+            print("error ?:%s"%ret.text, flush=True)
+            return False, ret.text
+
+        #print("code = %s / message = %s"%(ret.json()["code"], ret.json()["message"]))
+
+        code = ret.json()["errors"][0]["code"]
+        message = ret.json()["errors"][0]["message"]
+        print("code = %s / message = %s"%(code, message), flush=True)
+
+        if code != 200:
+            return False, message
+
+        return True, message
+    
     def miDistApiGetCalcResult(self):
         '''
         get-calc-result APIの実行
@@ -341,22 +367,21 @@ def main():
 
     print("wait untill end", flush=True)
     time.sleep(2.0)
-    priv_message = "unknown"
+    priv_status = "unknown"
+    priv_progress = "unknown"
     calc_status = ""
     while True:         # 計算終了になるまでループ
         ret, messages = api_prog.miDistApiStatus()
         if messages.split(":")[1] == "abnormal":
             calc_status = messages.split(":")[1]
-        #if ret is False:
-        #    print(messages, flush=True)
-        #    sys.exit(1)
+        ret, messages = api_prog.miDistApiProgress()
 
-        message = messages.split(":")[1]
-        if priv_message != message:
-            print("status change from %s to %s"%(priv_message, message), flush=True)
-            priv_message = message
+        progress = messages.split(":")[1]
+        if priv_progress != progress:
+            print("progress status change from %s to %s"%(priv_progress, progress), flush=True)
+            priv_progress = progress
 
-        if message == "got return":
+        if progress == "got return":
             break
         time.sleep(10.0)
 

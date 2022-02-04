@@ -1,6 +1,6 @@
 #!/bin/sh
 
-exec="python3.6 mi_dicomapi.py &"
+exec="python3.6 mi_dicomapi.py 2>&1 | tee /var/log/api_distcomp.log &"
 
 cd /home/misystem/misrc_distributed_computing_assist_api
 echo -n $"Stating distributed_computing_assist_API: "
