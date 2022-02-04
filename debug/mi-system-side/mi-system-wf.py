@@ -201,7 +201,7 @@ class mi_workflow(object):
 
         code = ret.json()["errors"][0]["code"]
         message = ret.json()["errors"][0]["message"]
-        sys.stdout.write("code = %s / message = %s"%(code, message))
+        sys.stdout.write("code = %s / message = %s\n"%(code, message))
         sys.stdout.flush()
         if message == "status:abnormal":
             return False, message
@@ -225,7 +225,7 @@ class mi_workflow(object):
 
         code = ret.json()["errors"][0]["code"]
         message = ret.json()["errors"][0]["message"]
-        sys.stdout.write("code = %s / message = %s"%(code, message))
+        sys.stdout.write("code = %s / message = %s\n"%(code, message))
         sys.stdout.flush()
 
         if code != 200:
@@ -380,7 +380,7 @@ def main():
 
         progress = messages.split(":")[1]
         if priv_progress != progress:
-            sys.stdout.write("progress status change from %s to %s"%(priv_progress, progress))
+            sys.stdout.write("progress status change from %s to %s\n"%(priv_progress, progress))
             sys.stdout.flush()
             priv_progress = progress
 
@@ -397,7 +397,7 @@ def main():
 
     print("calc end", flush=True)
     api_prog.accept_id = None
-    sys.stdout.write("calc result : %s"%calc_status)
+    sys.stdout.write("calc result : %s\n"%calc_status)
     sys.stdout.flush()
     if calc_status == "abnormal":
         sys.exit(1)
