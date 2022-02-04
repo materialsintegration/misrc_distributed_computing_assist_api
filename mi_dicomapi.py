@@ -804,7 +804,7 @@ def calc_end():
     else:
         log_print(3, flask.request.remote_addr, "[/%s] There is no information which can calc(no calc running), about the your site-id(%s)"%(url_id, site_id))
         #message = {"errors":[{"message":"There is no information which can calc(no calc running), about the your site id(%s)"%site_id, "code":200}]}
-        message = {"errors":[{"message":"サイト識別子(%s)で計算終了を通知できる情報はありません。(progress = %s)"%(progress, site_id), "code":200}]}
+        message = {"errors":[{"message":"サイト識別子(%s)で計算終了を通知できる情報はありません。(progress = %s)"%(site_id, progress), "code":200}]}
         return(make_api_response(message))
 
     # bodyのresultキーの確認
@@ -821,7 +821,16 @@ def calc_end():
         message = {"errors":[{"message":"unknown calc status(%s)"%result, "code":402}]}
         return(make_api_response(message, status_code=400))
 
-    calc_informations[accept_id]["calc_progress"] = result
+    if result == "calc end":
+        calc_informations[accept_id]["calc_status"] = "completed"
+        calc_informations[accept_id]["calc_progress"] = result
+    elif result == "abnormal":
+        calc_informations[accept_id]["calc_status"] = result
+        calc_informations[accept_id]["calc_progress"] = "calc end"
+    else:
+        calc_informations[accept_id]["calc_status"] = "unkown"
+        calc_informations[accept_id]["calc_progress"] = "calc end"
+        
     message = {"errors":[{"message":"ok", "code":200}]}
     return(make_api_response(message))
 
