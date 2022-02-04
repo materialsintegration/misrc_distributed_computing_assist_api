@@ -275,7 +275,7 @@ def add_calcinfo():
     if ("calc-info" in flask.request.get_json()) is False:
         message = {"errors":[{"message":"no command entry", "code":400}]}
         log_print(1, flask.request.remote_addr, "[/add-calcinfo] no command entry from MI system when calculation data regist.")
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=202))
         #return flask.make_response(flask.jsonify(response), 400)
 
     calc_info = flask.request.get_json().get("calc-info")
@@ -288,11 +288,11 @@ def add_calcinfo():
         if site_id is None:
             message = {"errors":[{"message":"missmatch remote-site id", "code":"400"}]}
             log_print(1, flask.request.remote_addr, "[/add-calcinfo] missmatch remote-site id")
-            return(make_api_response( message, status_code=400 ))
+            return(make_api_response( message, status_code=202 ))
     else:
         message = {"errors":[{"message":"no remote-site id", "code":400}]}
         log_print(1, flask.request.remote_addr, "[/add-calcinfo] no remote-site id")
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=202))
 
     # チェック中はvalid_commandsの作り直し禁止
     lock.acquire()
@@ -310,13 +310,13 @@ def add_calcinfo():
             log_print(1, flask.request.remote_addr, "[/add-calcinfo] invalid command entry(%s)"%calc_info["command"])
             #return flask.make_response(flask.jsonify(response), 401)
             lock.release()
-            return(make_api_response(message, status_code=400))
+            return(make_api_response(message, status_code=202))
     else:
         message = {"errors":[{"message":"no command entry", "code":400}]}
         log_print(1, flask.request.remote_addr, "[/add-calcinfo] no command entry")
         #return flask.make_response(flask.jsonify(response),400)
         lock.release()
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=202))
 
     lock.release()
 
@@ -329,7 +329,7 @@ def add_calcinfo():
         message = {"errors":[{"message":"duplicate uuid", "code":400}]}
         log_print(1, flask.request.remote_addr, "[/add-calcinfo] duplicate accept_id has been established.")
         #return flask.make_response(flask.jsonify(response), 400)
-        return(make_api_response(message, status_code=400))
+        return(make_api_response(message, status_code=202))
 
     # 登録情報の確認（時間超過を判定）
     check_dict()
@@ -551,6 +551,13 @@ def calc_request():
     '''
     計算の有無、問い合わせ
     '''
+
+    # チェック中はvalid_commandsの作り直し禁止
+    lock.acquire()
+    # 最新の適正コマンドリストの読み込み
+    get_system_config()
+
+    lock.release()
 
     # site_id他のチェック
     retval, site_id = check_id_in_requestargs("site_id", "calc-request")
